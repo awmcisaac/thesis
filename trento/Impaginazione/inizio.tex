@@ -1,0 +1,55 @@
+
+\Universita{University of Trento}
+\Dipartimento{Center for Mind/Brain Sciences}
+\CorsoDiLaurea{Master’s Degree in Cognitive Science}
+\AnnoAccademico{Academic Year 2022--2023}
+\Titolo{Temporal Reasoning in Vision and Language Models}
+\Relatore{Prof. Raffaella \textsc{Bernardi}}
+\RelatoreLabel{Supervisor}
+\CandidatoLabel{Graduate Student}
+
+\Candidato{Andrew \textsc{McIsaac}} 
+\Matricola{238571}
+\DataEsame{\today}
+\Logo{Impaginazione/logo_rosso.png}
+\LogoWidth{4.5cm} %optional, default: 3cm
+\LogoPosition{top}
+\LogoSfondo{Impaginazione/logo_bn.png}
+\opacitaSfondo{0.05}
+
+\begin{titlepage}
+    \newgeometry{left=3cm, right=3cm, bottom=2cm, top =3cm} 
+    \pagestyle{empty}
+    \makefrontpage
+    \restoregeometry
+\end{titlepage}
+
+\frontmatter
+% dedica
+~ \newpage
+\null\vspace{\stretch{1}}
+\begin{flushright}
+    \textit{Dedica}
+\end{flushright}
+\vspace{\stretch{2}}\null
+
+%ringraziamenti
+\chapter*{Acknowledgments}
+
+\begin{abstract}
+    Qui va l'abstract
+\end{abstract}
+
+\tableofcontents
+
+\printglossaries
+\addcontentsline{toc}{chapter}{Glossary}
+
+\printnomenclature
+\addcontentsline{toc}{chapter}{Nomenclature list}
+
+\mainmatter
+\chapter*{Introduction}
+\markboth{\MakeUppercase{Introduction}}{}
+\addcontentsline{toc}{chapter}{Introduction}
+\input{chapters/intro}
