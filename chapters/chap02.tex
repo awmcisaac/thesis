@@ -1,5 +1,23 @@
-\chapter{Title of the second chapter}
+%! TeX root = ../charles/en/thesis.tex
+\chapter{Related Work}
+\label{chap:rel}
 
-\section{Title of the first subchapter of the second chapter}
+\section{Video Language Models}
+\label{sec:vidlm}
 
-\section{Title of the second subchapter of the second chapter}
+CLIP-based \citep{radford2021clip} with no video data, 
+Contrastive with video data, Merlot Reserve
+Masked VLM: VideoBERT \citep{sun2019videobert}, VLM \citep{xu2021vlm}
+Separate frozen image/video approaches with finetuning/adapters: Flamingo \citep{alayrac2022flamingo}
+Separate frozen image/video approaches with prompt engineering: \citep{wang2022vidil, zeng2023socratic}
+
+
+\section{Contrastive Training}
+\label{sec:contrastive}
+
+InfoNCE loss, work in similar training styles for different domains
+\citep{momeni2023verbs, yuksekgonul2023when}.
+
+Most similar is \cite{bagad2023testoftime}. Restricted to just before/after.
+Synthetic dataset
+

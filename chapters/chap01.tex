@@ -1,9 +1,67 @@
-\chapter{Title of the first chapter}
+%! TeX root = ../charles/en/thesis.tex
 
-An example citation: \cite{Andel07}
+\chapter{Background}
+\label{chap:bg}
 
-\section{Title of the first subchapter of the first chapter}
+In this chapter, we briefly cover progress in obtaining useful representations
+of language (Section \ref{sec:lm}), images (Section \ref{sec:imrec}, and
+efforts to combine these two modalities (Section \ref{sec:vlm}). We then
+discuss the extension of vision and language models to videos (Section
+\ref{sec:vidlm}), which introduces the extra complexity of reasoning across
+sequences of images, and optionally adding a further modality, audio. 
+%We finish the chapter with an introduction to and motivation for studying the
+%task of video question answering (Section \ref{sec:vidqa}).
 
-New line
+\section{Language Modeling}
+\label{sec:lm}
 
-\section{Title of the second subchapter of the first chapter}
+Language modeling is the task of predicting a word 
+
+\subsection{Recurrent Neural Networks}
+\label{ssec:rnn}
+
+Vanilla RNN, LSTM, GRU, attention
+	
+\subsection{Transformer}
+\label{ssec:transformer}
+
+\cite{vaswani2017attention} introduced the Transformer architecture for sequence tasks, replacing the recurrent nature of the RNN and its variants with multi-head self-attention
+
+\section{Image Recognition}
+\label{sec:imrec}
+
+Object detection, classification
+
+\subsection{Convolutional Neural Networks}
+\label{ssec:cnn}
+
+
+\subsection{Vision Transformer}
+\label{ssec:vit}
+
+\cite{dosovitskiy2021vit} introduced the Vision Transformer (ViT), which takes the impressive performance of the Transformer architecture on sequence tasks and applies it to image tasks. The authors represent an image as a sequence of patches of an image, with an extra patch embedding added alongside the positional embedding of the Transformer \cite{vaswani2017attention} to maintain the 2-dimensional information of an image when projected into a linear sequence. 
+
+\section{Vision and Language Models}
+\label{sec:vlm}
+
+\subsection{CLIP}
+\label{ssec:clip}
+
+\subsection{Visual Question Answering}
+\label{ssec:vqa}
+
+\section{Video Language Models}
+\label{sec:vidlm}
+
+%\section{Video Question Answering}
+%\label{sec:vidqa}
+%
+%\subsection{STAR Dataset}
+%\label{ssec:star}
+%
+%We primarily focus on this due to its focus on sequential questions that evaluate model performance on temporal reasoning
+%
+%\subsection{Merlot Reserve}
+%\label{ssec:mreserve}
+%
+%We examine a specific video language model, Merlot Reserve \citep{zellers2022mreserve}, that performs strongly on STAR.

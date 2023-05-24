@@ -13,4 +13,4 @@ abstract.pdf: abstract.tex abstract.xmpdata
 	pdflatex $<
 
 clean:
-	rm -f *.log *.dvi *.aux *.toc *.lof *.lot *.out *.bbl *.blg *.xmpi ../../chapters/*.aux
+	rm -f creationdate.lua *.log *.dvi *.aux *.toc *.lof *.lot *.out *.bbl *.blg *.xmpi *.fdb_latexmk *.fls *.xdv *.synctex.gz ../../chapters/*.aux

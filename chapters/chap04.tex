@@ -1,0 +1,45 @@
+%! TeX root = ../charles/en/thesis.tex
+\chapter{Method}
+\label{chap:method}
+
+\section{Probing Temporal Ability}
+\label{sec:prob}
+
+Table on changing temporal indicators improving performance on STAR
+\begin{table}[htpb] 
+    \centering 
+    \caption{Results of Merlot Reserve on STAR dataset. Differences explained  
+        by different sampling techniques I think, or question-statement 
+        conversions. I took care to adapt the statements appropriately for verb 
+        tense agreement. Also random seed may be different.For val, 43.01 mean 
+        is weighted by num in each group.} 
+    \label{tab:star} 
+    \begin{tabular}{c|ccccc} 
+        & Interaction & Sequence & Prediction & Feasibility & Mean \\
+        \hline 
+        Val & 43.12 & 42.33 & 43.27 & 47.14 & 43.01 (43.97) \\
+        Test & 40.51 & 44.76 & 43.85 & 39.48 & 42.15 \\  
+        Test Paper (B+audio) & 44.8 & 42.4 & 38.8 & 36.2 & 40.5 
+    \end{tabular} 
+\end{table} 
+
+Switch before/after: 42.92 vs 42.33 with correct temporal ordering
+
+Use before/after as MASKed answers: 50.86 (basically random)
+
+\begin{table}[htpb]
+    \centering
+    \caption{Shuffle frames (randomly)}
+    \label{tab:shuf}
+    \begin{tabular}{c|cccc|c}
+        & Interaction & Sequence & Prediction & Feasibility & Mean \\
+        \hline
+        Standard & 43.12 & 42.33 & 43.27 & 47.14 & 43.01 (43.97) \\
+        Shuffle & 42.08 & 42.58 & 47.28 & 49.2 & 43.28 (45.29) \\
+    \end{tabular}
+\end{table}
+
+\section{Experiment Setup}
+\label{sec:setup}
+
+

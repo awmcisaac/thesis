@@ -1,1 +1,28 @@
-Words go here
+%! TeX root = ../charles/en/thesis.tex
+
+A bit on how vision and language models perform well on many benchmarks. Then
+talk about videos. How vision and language models have been extended to video
+tasks via extra training on paired video-caption datasets, frozen LMs.
+
+Introduce the problem. Main question: do they learn temporal reasoning? Are
+models able to learn the difference between action X happening before action Y,
+versus action X happening after action Y.
+
+What do we do? - Discover that the answer is no, at least for Merlot Reserve.
+How? Masking temporal indicator in STAR, no idea if it is before/after.
+
+Perhaps this should be explored for some other models as well (e.g. ClipBERT
+\cite{lei2021clipbert}, Flamingo \cite{alayrac2022flamingo}, Frozen CLIP
+\cite{lin2022evl}, VidIL \cite{wang2022vidil}, Socratic Models
+\cite{zeng2023socratic}, VideoCLIP \cite{xu2021videoclip})
+
+So, mask temporal indicators in scripts, add negatives for cues.
+E.g. before -\textgreater [after, at the same time, while]
+Or possibly masking actions, how to generate negatives for this isn't clear.
+Would need multiple masks potentially, quite complicated.
+
+Train with either YT-Temporal-1B or Charades. Does it improve performance on
+answering questions that require temporal information? If Charades, probably
+need to do other datasets as well, e.g. NextQA, Epic Kitchens.
+
+Hopefully the answer is that it performs better.
