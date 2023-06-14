@@ -7,7 +7,7 @@ In this chapter, we briefly cover progress in obtaining useful representations
 of language (Section \ref{sec:lm}), images (Section \ref{sec:imrec}, and
 efforts to combine these two modalities (Section \ref{sec:vlm}). We then
 discuss the extension of vision and language models to videos (Section
-\ref{sec:vidlm}), which introduces the extra complexity of reasoning across
+\ref{sec:vidlmi}), which introduces the extra complexity of reasoning across
 sequences of images, and optionally adding a further modality, audio. 
 %We finish the chapter with an introduction to and motivation for studying the
 %task of video question answering (Section \ref{sec:vidqa}).
@@ -15,7 +15,7 @@ sequences of images, and optionally adding a further modality, audio.
 \section{Language Modeling}
 \label{sec:lm}
 
-Language modeling is the task of predicting a word 
+Language modeling is the task of predicting a word given a previous token of words.
 
 \subsection{Recurrent Neural Networks}
 \label{ssec:rnn}
@@ -25,16 +25,20 @@ Vanilla RNN, LSTM, GRU, attention
 \subsection{Transformer}
 \label{ssec:transformer}
 
-\cite{vaswani2017attention} introduced the Transformer architecture for sequence tasks, replacing the recurrent nature of the RNN and its variants with multi-head self-attention
+\cite{vaswani2017attention} introduced the Transformer architecture for sequence tasks, replacing the recurrent nature of the RNN and its variants with multi-head self-attention. Allows for parallel computation, but cost of $O(n^2)$ in sequence length.
+
+More recent implementations improve this, e.g. Flash Attention
 
 \section{Image Recognition}
 \label{sec:imrec}
 
+A key part of video and language models is learning representations of frames in sequence, which involves the classical tasks of object detection, segmentation, and image classification.
 Object detection, classification
 
 \subsection{Convolutional Neural Networks}
 \label{ssec:cnn}
 
+Convolutional neural networks (CNNs) such as AlexNet~\citep{krizhevsky2012alexnet}
 
 \subsection{Vision Transformer}
 \label{ssec:vit}
@@ -44,14 +48,21 @@ Object detection, classification
 \section{Vision and Language Models}
 \label{sec:vlm}
 
+Many approaches, joint training with concatenated image and text features into BERT (VisualBERT), learning both image and text features concurrently.
+
+
 \subsection{CLIP}
 \label{ssec:clip}
+
+\citep{radford2021clip}
 
 \subsection{Visual Question Answering}
 \label{ssec:vqa}
 
 \section{Video Language Models}
-\label{sec:vidlm}
+\label{sec:vidlmi}
+
+Models which take as input video. How to choose frames, methods for learning temporal aspect, modeling sequences of images
 
 %\section{Video Question Answering}
 %\label{sec:vidqa}
