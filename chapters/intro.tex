@@ -10,13 +10,16 @@ versus action X happening after action Y.
 
 What do we do? - Discover that the answer is no, at least for Merlot Reserve.
 How? Masking temporal indicator in STAR, no idea if it is before/after.
+\XXX{Ondrej: A question for you or Raffa: Discovering that the answer is no is actually fortunate, the easier option. What is unclear is how would we convince ourselves that the answer is yes. What methodology would we use?}
 
 Perhaps this should be explored for some other models as well (e.g. ClipBERT
 \cite{lei2021clipbert}, Flamingo \cite{alayrac2022flamingo}, Frozen CLIP
 \cite{lin2022evl}, VidIL \cite{wang2022vidil}, Socratic Models
 \cite{zeng2023socratic}, VideoCLIP \cite{xu2021videoclip})
+\XXX{Ondrej: yes! But primarily focus on the promised Merlot Reserve. If you can easily (one push of a button) do more, do as many as you can.}
 
 So, mask temporal indicators in scripts, add negatives for cues.
+\XXX{Ondrej: without knowing the details, I can't imagine any such cues yet. Maybe provide already an example in the introduction.}
 E.g. before -\textgreater [after, at the same time, while]
 Or possibly masking actions, how to generate negatives for this isn't clear.
 Would need multiple masks potentially, quite complicated.
@@ -26,3 +29,4 @@ answering questions that require temporal information? If Charades, probably
 need to do other datasets as well, e.g. NextQA, Epic Kitchens.
 
 Hopefully the answer is that it performs better.
+\XXX{For ``better'' you need a continuous measure (which you will certainly and easily have), and an improvement in this measure. Yet my high-level methodological question remains: What score in this measure would the model need in order to say ``the model does learn temporal reasoning''.}
