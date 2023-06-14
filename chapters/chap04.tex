@@ -44,4 +44,98 @@ Use before/after as MASKed answers: 50.86 (basically random)
 \section{Experiment Setup}
 \label{sec:setup}
 
+\subsection{Dataset Creation}
+\label{sec:data}
+
+We finetune the Merlot Reserve model on the Charades dataset. For each video,
+we create relation pairs based on annotated actions. Each relation is based on
+Allen's Interval Algebra~\citep{allen1983interval}, shown in Table
+\ref{tab:allen_interval}.
+
+\begin{table}[htpb]
+	\centering
+	\caption{The Thirteen Possible Relationships. All relation types except for
+		\textit{equal} have a corresponding inverse relation type. Modified
+		from~\cite{allen1983interval}}
+	\label{tab:allen_interval}
+	\begin{tabular}{ll}
+	Relation & Pictoral Example \\
+	\hline
+	\texttt{X} \textit{before} \texttt{Y} & \texttt{XXX YYY} \\
+	\texttt{X} \textit{equal} \texttt{Y} & \texttt{XXX} \\
+					   & \texttt{YYY} \\
+	\texttt{X} \textit{meets} \texttt{Y} & \texttt{XXXYYY} \\
+	\texttt{X} \textit{overlaps} \texttt{Y} & \texttt{XXX} \\
+						& \texttt{ YYY} \\
+	\texttt{X} \textit{during} \texttt{Y} & \texttt{ XXX} \\
+						& \texttt{YYYYYY} \\
+	\texttt{X} \textit{starts} \texttt{Y} & \texttt{XXX} \\
+						& \texttt{YYYYY} \\
+	\texttt{X} \textit{finishes} \texttt{Y} & \texttt{\space\space XXX} \\
+							& \texttt{YYYYY} \\
+	\end{tabular}
+\end{table}
+
+\subsection{Aligning Frames}
+
+For each video we have all relations $(X, Y)$ between pairs of actions $X, Y$.
+We then attempt to include frames related to as many relations as possible,
+with the requirement that relations cannot overlap with one another in time.
+Where there is an overlap, the precedence order of relations is as follows: \textit{meets,
+overlaps, starts, finishes, during, equals, precedes}. %TODO: why?
+
+Frames are selected based on $(X_{start}, X_{end}), (Y_{start}, Y_{end})$ and
+the specific relation type. If a relation requires frames that intersect an
+already selected frame, the relation is discarded. This is to keep a strict
+relationship between actions and time relations. Once all relations have been
+processed, any remaining frames up to 8 (the number of frames used in Merlot
+Reserve) are selected uniformly at the beginning or end, depending on the time
+before and after any relations. %Maybe more detail on exactly what is done here?
+
+Each frame associated with a relation is annotated with the associated actions
+$X$ and $Y$, along with a temporal indicator based on the specific relation
+type. 
+
+%For example, for a 30 second video, one relation may select two frames
+%at 11 and 17 seconds, based on the times of the relation's actions. If a second
+%relation requires frames at 15 and 19 seconds, this relation would be scrapped,
+%since the alignment of the text description to their respective frames becomes
+%impossible.
+
+\subsection{Positive Labels}
+
+Positive labels are created depending on the relation type, and consist of two
+actions $X$ and $Y$, and temporal markers indicating the relation between the
+two actions. The labels are split across multiple frames as appropriate
+depending on the relation type. For example, a \textit{finishes} relation type
+is split across two frames, with the first frame being $Y$ + \{then, before\},
+and the second $X$ + \{while, at the same time as\} + $Y$. 
+%TODO: probably more detail, maybe a chart here.
+
+\subsection{Contrastive Span Objective}
+
+We use a slightly modified contrastive span objective, as
+in~\cite{zellers2022mreserve}. The difference between our implementation and
+the original comes with the masking strategy. We restrict possibly masked spans
+to spans which contain a temporal word. Since we finetune on the pretrained
+Merlot Reserve model, we do not require further training of the general span
+objective, but focus explicitly on the learning of temporal reasoning between
+relations. We do this by using additional hard negatives focused on temporal
+words, along with negatives chosen randomly from the batch.  The hard negatives
+act as a close match to the positive option in the contrastive setup, but are
+specifically wrong in the temporal dimension. This focuses the model on learning
+how to reason across time.
+
+\subsection{Creating Negative Spans}
+
+We create a list of negative spans for each relation type. Negative spans are
+spans that match the corresponding positive span, except for temporal markers
+in the span. The temporal marker is changed to an alternative temporal marker
+that does not reflect the order of events as determined by the relation. For
+example, the relation type \textit{precedes} is mapped to a set of negative
+temporal markers \textit{``after", ``while", ``at the same time as"}. Each
+negative span consists of the positive span with the positive temporal marker
+substituted for a negative temporal marker. These are then fed to the model
+as additional hard negatives for the contrastive span objective.
+
 

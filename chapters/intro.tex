@@ -30,3 +30,28 @@ need to do other datasets as well, e.g. NextQA, Epic Kitchens.
 
 Hopefully the answer is that it performs better.
 \XXX{For ``better'' you need a continuous measure (which you will certainly and easily have), and an improvement in this measure. Yet my high-level methodological question remains: What score in this measure would the model need in order to say ``the model does learn temporal reasoning''.}
+
+The rest of this thesis is organised as follows:
+
+\begin{itemize}
+	\item Chapter \ref{chap:bg} goes into the background of language models,
+		image recognition models, and vision and language models which combine
+		the two modalities. We discuss one popular method, Contrastive
+		Language-Image Pretraining (CLIP), and one key downstream task, visual
+		question answering. We finish the chapter with a broad overview of video
+		language models.
+	\item Chapter \ref{chap:rel} explores related work on video language models,
+		with a particular focus on work that explores the impact of contrastive
+		pretraining. We also look at other approaches for instilling temporal
+		reasoning in these models.
+	\item In Chapter \ref{chap:dataset} we look at the main datasets used, STAR and NExT-QA.
+	\item Chapter \ref{chap:method} details experiments that show how current
+		models perform on temporal reasoning tasks, and describes our approach
+		to generating additional hard negatives focussing on temporal words for
+		contrastive training.
+	\item Chapter \ref{chap:results} shows performance of our model on STAR and NExT-QA.
+	\item Chapter \ref{chap:discussion} discusses the use of contrastive
+		pretraining methods in video and language models, and how our method
+		affects performance of temporal reasoning systems.
+	\item Finally, the \nameref{chap:conclusion} summarises our findings.
+\end{itemize}
