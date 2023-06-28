@@ -26,6 +26,7 @@ Table on changing temporal indicators improving performance on STAR
 \end{table} 
 
 Switch before/after: 42.92 vs 42.33 with correct temporal ordering
+%TODO: get test results for this as well
 
 Use before/after as MASKed answers: 50.86 (basically random)
 
@@ -138,4 +139,9 @@ negative span consists of the positive span with the positive temporal marker
 substituted for a negative temporal marker. These are then fed to the model
 as additional hard negatives for the contrastive span objective.
 
-
+\begin{figure}[htpb]
+	\centering
+	\includegraphics[width=0.8\textwidth]{hard_negatives}
+	\caption{Example of annotation with hard negatives for temporal words}
+	\label{fig:hard_neg}
+\end{figure}
