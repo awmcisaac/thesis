@@ -5,7 +5,7 @@
 \section{Probing Temporal Ability}
 \label{sec:prob}
 
-\XXX{With the current limited writeup, Ondrej cannot comment yet. Some critical remarks: always try hard to complement other people's scores (which you can cite from a paper) with \emph{your own measurement} of their outputs. Typically, these reported and re-measured numbers will differ and it is always important to know them for a reliable comparison with your own scores.}
+%\XXX{With the current limited writeup, Ondrej cannot comment yet. Some critical remarks: always try hard to complement other people's scores (which you can cite from a paper) with \emph{your own measurement} of their outputs. Typically, these reported and re-measured numbers will differ and it is always important to know them for a reliable comparison with your own scores.}
 
 Table on changing temporal indicators improving performance on STAR
 \begin{table}[htpb] 
@@ -14,7 +14,7 @@ Table on changing temporal indicators improving performance on STAR
         by different sampling techniques I think, or question-statement 
         conversions. I took care to adapt the statements appropriately for verb 
         tense agreement. Also random seed may be different.For val, 43.01 mean 
-        is weighted by num in each group.} 
+        is weighted by num in each group.}
     \label{tab:star} 
     \begin{tabular}{c|ccccc} 
         & Interaction & Sequence & Prediction & Feasibility & Mean \\
@@ -45,13 +45,15 @@ Use before/after as MASKed answers: 50.86 (basically random)
 \section{Experiment Setup}
 \label{sec:setup}
 
-\subsection{Dataset Creation}
-\label{sec:data}
+%We explore how 
 
-We finetune the Merlot Reserve model on the Charades dataset. For each video,
-we create relation pairs based on annotated actions. Each relation is based on
-Allen's Interval Algebra~\citep{allen1983interval}, shown in Table
-\ref{tab:allen_interval}.
+\subsection{Dataset Creation}
+\label{ssec:data}
+
+We finetune the Merlot Reserve model on videos from the Charades dataset. For
+each video, we create new relation pairs based on annotated actions. Each
+relation is based on Allen's Interval Algebra~\citep{allen1983interval}, shown
+in Table \ref{tab:allen_interval}. 
 
 \begin{table}[htpb]
 	\centering
@@ -78,6 +80,7 @@ Allen's Interval Algebra~\citep{allen1983interval}, shown in Table
 \end{table}
 
 \subsection{Aligning Frames}
+\label{ssec:frames}
 
 For each video we have all relations $(X, Y)$ between pairs of actions $X, Y$.
 We then attempt to include frames related to as many relations as possible,
@@ -104,6 +107,7 @@ type.
 %impossible.
 
 \subsection{Positive Labels}
+\label{ssec:pos_labels}
 
 Positive labels are created depending on the relation type, and consist of two
 actions $X$ and $Y$, and temporal markers indicating the relation between the
@@ -114,6 +118,7 @@ and the second $X$ + \{while, at the same time as\} + $Y$.
 %TODO: probably more detail, maybe a chart here.
 
 \subsection{Contrastive Span Objective}
+\label{ssec:contr_span}
 
 We use a slightly modified contrastive span objective, as
 in~\cite{zellers2022mreserve}. The difference between our implementation and
@@ -128,6 +133,7 @@ specifically wrong in the temporal dimension. This focuses the model on learning
 how to reason across time.
 
 \subsection{Creating Negative Spans}
+\label{ssec:neg_labels}
 
 We create a list of negative spans for each relation type. Negative spans are
 spans that match the corresponding positive span, except for temporal markers
