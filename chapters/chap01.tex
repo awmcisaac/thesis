@@ -4,15 +4,14 @@
 \label{chap:bg}
 
 In this chapter, we briefly cover progress in obtaining useful representations
-of language (Section \ref{sec:lm}), images (Section \ref{sec:imrec}), and
-efforts to combine these two modalities (Section \ref{sec:vlm}). We then
-look at the extension of vision and language models to videos (Section
-\ref{sec:vidlm}), which introduces the extra complexity of reasoning across
-sequences of images, and optionally adding a further modality, audio. Finally,
-we explore the literature on temporal reasoning in language and in vision
-(Section \ref{sec:tempreason}).
+of language (\cref{sec:lm}), images (\cref{sec:imrec}), and efforts to combine
+these two modalities (\cref{sec:vlm}). We then look at the extension of vision
+and language models to videos (\cref{sec:vidlma}), which introduces the extra
+complexity of reasoning across sequences of images, and optionally adding a
+further modality, audio. Finally, we explore the literature on temporal
+reasoning in language and in vision (\cref{sec:tempreason}).
 %We finish the chapter with an introduction to and motivation for studying the
-%task of video question answering (Section \ref{sec:vidqa}).
+%task of video question answering (\cref{sec:vidqa}).
 
 \section{Language Modeling}
 \label{sec:lm}
@@ -100,7 +99,7 @@ sequence tasks, in both language and vision.
 \subsection{Masked Language Modeling}
 \label{ssec:mlm}
 
-BERT~\cite{devlin2019bert} uses only the encoder layers of the Transformer to
+BERT~\citep{devlin2019bert} uses only the encoder layers of the Transformer to
 create strong representations of an input sequence. Since it is trivial to
 predict the next token in a sequence when provided with the entire context,
 BERT, and its descendants such as RoBERTa~\citep{liu2020roberta}, train on a
@@ -117,7 +116,7 @@ a common paradigm due to the relative low cost of finetuning once a large model
 has been pre-trained. BERT achieved state of the art on eleven NLP tasks, all
 of which were finetuned in less than an hour on a TPU. BERT has successfully
 been adapted to vision and language models, as we will discuss in
-Section~\ref{sec:vlm}.
+\cref{sec:vlm}.
 
 
 \section{Image Recognition}
@@ -129,36 +128,37 @@ segmentation, and image classification. Much like in NLP, the standard approach
 is to pre-train on large image datasets and finetune to a specific desired
 task. Convolutional neural
 networks~\citep{lecun1989lenet,krizhevsky2012alexnet,he2016resnet} use
-convolution kernels, pooling, and optionally normalisation, dense or residual
-layers to create representations of image features.
+convolution kernels, pooling, and optionally batch normalisation, dense or
+residual layers to create representations of image features.
 AlexNet~\citep{krizhevsky2012alexnet} uses a multi-layer convolutional neural
-network (CNN) to classify images from ImageNet~\cite{imagenet}, a dataset of
-over 15 million images from around 22,000 categories, and was the first to show
-the scaling power of large datasets and model sizes for producing strong image
-features. 
+network (CNN) to classify images from ImageNet~\citep{deng2009imagenet}, a
+dataset of over 15 million images from around 22,000 categories, and was the
+first to show the scaling power of large datasets and model sizes for producing
+strong image features. 
 
 There have been attempts to combine CNN architectures with self-attention
 mechanisms. This may provide more scope for non-local computation which may be
 required on tasks such as object detection with large objects. However, due to
 the quadratic cost of self-attention in the number of pixels, naive
 implementations are infeasible, and approximations struggle to scale
-efficiently~\cite{carion2020detr}. The Vision Transformer~\cite{dosovitskiy2021vit}
-does away with the CNN for image recognition, and uses an adapted version of
-the Transformer for greater scalability.
+efficiently~\citep{carion2020detr}. The Vision
+Transformer~\citep{dosovitskiy2021vit} does away with the CNN for image
+recognition, and uses an adapted version of the Transformer for greater
+scalability.
 
 
 \subsection{Vision Transformer}
 \label{ssec:vit}
 
-\cite{dosovitskiy2021vit} introduced the Vision Transformer (ViT), which takes
+\citet{dosovitskiy2021vit} introduced the Vision Transformer (ViT), which takes
 the impressive performance of the Transformer architecture on sequence tasks
 and applies it to image tasks. The authors represent an image as a sequence of
 patches of an image, with an extra patch embedding added alongside the
-positional embedding of the Transformer \cite{vaswani2017attention} to maintain
+positional embedding of the Transformer \citep{vaswani2017attention} to maintain
 the 2-dimensional information of an image when projected into a linear
-sequence. The model is shown in Fig.~\ref{fig:vit}.  The Vision Transformer
-matched or exceeded state of the art on many image classification datasets,
-while being trained for comparatively less time.
+sequence. The model is shown in \cref{fig:vit}. The Vision Transformer matched
+or exceeded state of the art on many image classification datasets, while being
+trained for comparatively less time.
 
 \begin{figure}[htpb]
 	\centering
@@ -166,7 +166,7 @@ while being trained for comparatively less time.
 	\caption{The Vision Transformer splits an image into patches, embeds them,
 		and feeds them into a Transformer encoder. Classification is learned
 		via an MLP head following the encoder. Figure reproduced
-		from~\cite{dosovitskiy2021vit}}
+		from~\citet{dosovitskiy2021vit}}
 	\label{fig:vit}
 \end{figure}
 
@@ -174,22 +174,22 @@ while being trained for comparatively less time.
 \subsection{CLIP}
 \label{ssec:clip}
 
-\cite{radford2021clip} introduced CLIP (Contrastive Language-Image
+\citet{radford2021clip} introduced CLIP (Contrastive Language-Image
 Pre-training), which uses the Info-NCE loss~\citep{oord2019infonce} to jointly
 learn relationships between encodings of text captions and extracted feature
 representations of associated images. The Info-NCE loss trains a multimodal
 embedding space to maximise the cosine similarity of matching pairs of captions
 and images, while minimising the cosine similarity of non-matching pairs in the
-batch. The approach is shown in Fig.~\ref{fig:clip}. A key part of this
-approach is using a very large batch, so that there are many incorrect pairings
-to learn from. \cite{radford2021clip} use a batch size of 32768. The text
-encoder is a Transformer~\citep{vaswani2017attention}, and their best model
-uses a Vision Transformer~\citep{dosovitskiy2021vit} as the image encoder.
+batch. The approach is shown in \cref{fig:clip}. A key part of this approach is
+using a very large batch, so that there are many incorrect pairings to learn
+from. \citet{radford2021clip} use a batch size of 32768. The text encoder is a
+Transformer~\citep{vaswani2017attention}, and their best model uses a Vision
+Transformer~\citep{dosovitskiy2021vit} as the image encoder.
 
 \begin{figure}[htpb]
 	\centering
 	\includegraphics[width=\textwidth]{CLIP.png}
-	\caption{CLIP. From~\cite{radford2021clip}}
+	\caption{CLIP. From~\citet{radford2021clip}}
 	\label{fig:clip}
 \end{figure}
 
@@ -202,9 +202,8 @@ pre-training objective have wide applicability to a range of VLM and Video
 Language Models, particularly as frozen features from which to add smaller
 modules on top for adapting to vision and language
 tasks~\citep{alayrac2022flamingo,lin2022evl,lei2021clipbert}. We discuss some
-of these models in Section~\ref{sec:vidlm}, and consider the limitations and
-possible expansions of the contrastive pre-training method
-in Section~\ref{sec:contrastive}.
+of these models in \cref{sec:vidlmb}, and consider the limitations and possible
+expansions of the contrastive pre-training method in \cref{sec:contrastive}.
 
 
 \section{Vision and Language Models}
@@ -220,7 +219,7 @@ vision through multimodal embeddings. A key challenge in recent years has been
 to find suitable methods for creating these shared representations.
 
 Following the strong performance in NLP of BERT~\citep{devlin2019bert},
-\cite{li2019visualbert} extend BERT to include visual features extracted from a
+\citet{li2019visualbert} extend BERT to include visual features extracted from a
 CNN as well as text tokens as input to a Transformer encoder, implicitly
 discovering a joint representation between the two modalities. The authors use
 the self-attention mechanism to align elements of the input text and regions in
@@ -231,7 +230,7 @@ applications, including visual question answering (see below).
 %\cite{lu2019vilbert}
 
 Other approaches take frozen encodings of image, text, or both, and learn a
-shared embedding space on top of this (e.g. BLIP-2 \cite{li2023blip2})
+shared embedding space on top of this (e.g. BLIP-2 \citep{li2023blip2})
 
 %Many approaches, joint training with concatenated image and text features into
 %BERT (VisualBERT), learning both image and text features concurrently.
@@ -246,9 +245,9 @@ datasets is to ensure that there are few statistical biases or shortcuts in the
 answer distribution that a model can exploit without a true understanding of
 the scene. For example, models trained on the VQA dataset~\citep{antol2015vqa}
 were found to make predictions based on overly strong language priors without
-considering the associated image~\cite{zhang2016yin} (a green banana may trip
+considering the associated image~\citep{zhang2016yin} (a green banana may trip
 up a model) and failed to show complete question understanding, settling on an
-answer before receiving the full question ~\cite{agrawal2016analyzing}.
+answer before receiving the full question ~\citep{agrawal2016analyzing}.
 Questions generally required little reasoning or compositionality, with many
 answers achievable solely by object recognition~\citep{hudson2019gqa}. The GQA
 dataset~\citep{hudson2019gqa} is one dataset that aims to limit these issues
@@ -256,45 +255,131 @@ by generating questions with linguistic diversity and a large vocabulary, and
 balancing the answer distribution through sampling. 
 
 Visual question answering has also been extended to question answering over
-videos. On top of scene understanding, video QA requires event understanding to
-understand causal and temporal relationships within the context of the video. A
-particular challenge in developing models for this task is combining and
-aligning the modalities of text, vision, and audio as well.  Numerous datasets
-have been proposed for this task,
-e.g.~\cite{xu2016msr-vtt,wu2021star,xiao2021nextqa,lei2020tvqaplus}. We discuss
-some of them, namely STAR~\cite{wu2021star} and NExT-QA~\cite{xiao2021nextqa}
-in Chapter~\ref{chap:dataset}.
+videos. On top of scene understanding, video question answering requires event
+understanding to understand causal and temporal relationships within the
+context of the video. A particular challenge in developing models for this task
+is combining and aligning the modalities of text, vision, and audio as well.
+Numerous datasets have been proposed for this task,
+e.g.~\citet{xu2016msr-vtt,wu2021star,xiao2021nextqa,lei2020tvqaplus}. We discuss
+two, STAR~\citep{wu2021star} and NExT-QA~\citep{xiao2021nextqa}, in
+\cref{chap:dataset}.
 
 
 \section{Video Language Models}
-\label{sec:vidlm}
+\label{sec:vidlma}
 
-%Models which take as input video. How to choose frames, methods for learning
+%Models which solve video tasks. How to choose frames, methods for learning
 %temporal aspect, modeling sequences of images
-
-
+Much as the task of visual question answering has been extended to the domain
+of video, so too have models been created for video language tasks. Video
+language models are models used to solve problems related to video
+understanding tasks. This introduces the added complexity of temporal modeling
+to understand relationships between successive frames in the video, as well as
+the possibility of modeling audio where the data allows it. There are two main
+ways of solving these tasks. The first is to use pretrained vision and language
+models we saw previously to the new domain without any specific training or
+finetuning on a video dataset.  Alternatively, we can train on a video dataset,
+either from scratch, or finetuning from a pretrained vision and language model.
+This section explores both methods.
 
 \subsection{Adapted from Vision and Language Models}
 \label{sec:adaptvlm}
 
-Models which take models trained on images and adapt to video
+Pre-trained generative language models have shown strong capabilities for
+in-context learning~\citep{brown2020gpt3}. In-context learning provides a number
+of examples of a task (for few-shot learning -- zero-shot learning provides only
+a task description) as the start of a prompt to a language model, where a
+typical example contains the context of the task and its desired completion.
+The language model must then provide the correct completion when presented with
+just the example context. This idea, and extensions, have been shown to be
+effective for a wide range of tasks, particularly those which require advanced
+reasoning~\citep{wei2022cot,kojima2022step}.
 
-\cite{buch2022revisiting} -- Testing video tasks on single frames
+By providing generative language models with access to image features in its
+prompt, it is possible to leverage pre-trained language models for video tasks.
+\citet{wang2022vidil} use a vision and language model to label objects, events
+and attributes, as well as captions, for each sampled frame in a video. These
+features are then composed in a template for few-shot learning of video tasks.
+Temporal relationships between frames are modeled in the template using textual
+indicators (`first', `then', `finally'). Crucially, no finetuning of language
+or vision and language models is performed, so high quality pretrained models
+can be plugged in and changed easily. This process is highly dependent on
+strong visual feature extraction, meaning that key low-level features may be
+lost if the vision models are not strong enough. Concurrent work
+by~\citet{zeng2023socratic} finds that using stronger vision and language
+models correlates with better performance when combining VLMs and LMs in a
+zero-shot manner for egocentric perception. Finally, the added latency costs of
+having separate models for visual tokenisation, frame captioning, and language
+generation may make the overall system inadequate for practical use.
 
-\cite{wang2022vidil} -- VidIL (prompt engineering gives lists of objects,
-events, attributes identified in frames, along with individual captions).
-Language model (InstructGPT \cite{ouyang2022instructgpt}) left to produce
-video-level captions, with specially designed prompts (``first\ldots then\ldots
-finally''). No finetuning or pretraining on video
+\citet{portilloquintero2021clipvidret} use CLIP features with an aggregation
+function across frames to adapt to the video domain for retrieval tasks. The best
+aggregation function tested was to simply average frame-level features, which
+beat previous best recall@1 scores on the MSR-VTT~\citep{xu2016msr-vtt} dataset.
+The authors found that using a single frame from around one second in to the
+video as the aggregation function gives significantly worse recall performance
+than other aggregation functions which take into account multiple frames.
 
-\cite{zeng2023socratic} -- Similar idea to VidIL
+By contrast, \citet{huang2018videotemporal} found that temporal understanding
+plays just a small role in multiple video datasets. On two action recognition
+datasets, the impact of motion accounts for just 6 percentage points of 79\%
+accuracy on UCF101~\citep{soomro2012ucf101}, and 5 points of 47\% accuracy on
+Kinetics~\citep{carreira2018kinetics600}, and 40\% and 35\% of classes do not
+require any temporal understanding for the two datasets respectively.
+\citet{buch2022revisiting} extend this finding for video language tasks, with
+single frame understanding performing strongly compared to state of the art
+models, ``even in settings intended for complex multi-frame event
+understanding''. The key distinction between these works
+and~\citet{portilloquintero2021clipvidret} is that the model selects a highly
+informative frame based on its task. \citet{buch2022revisiting} propose that
+their design, the atemporal probe (ATP), should be used to design better
+datasets that better test efficacy of a benchmark for causal and temporal
+understanding. They find a subset of NExT-QA~\citep{xiao2021nextqa} questions
+that ``truly necessitate video-level understanding compared with the original
+dataset''. We test on both NExT-QA and this subset, denoted
+ATP\textsubscript{hard}, in our experiments.
+%TODO: Delete last few lines if authors don't respond
+
+%Either train with explicit temporal tokens (e.g.~\citet{lin2022evl} with temporal convolution and cross-frame attention, \citet{lei2021clipbert} with temporal fusion and sequential frames and word embeddings) or use language to steer temporal modality \citep{wang2022vidil,zeng2023socratic}.
+
+
+%\citet{zeng2023socratic} -- Similar idea to VidIL, but zero-shot composition
+
 
 \subsection{Training on Videos}
 \label{sec:vidtrain}
 
-Models which take into account temporal nature and train/finetune on video datasets
+%Models which take into account temporal nature and train/finetune on video datasets
 
-\cite{lin2022evl} -- train video recognition models from frozen CLIP features
+Models 
+Since one of the questions we are interested in is how contrastive training
+affects the temporal reasoning ability of video language models, this section
+mainly explores models trained with a contrastive objective. We note, however,
+that other models~\citep{lei2021clipbert} (and others!!) have achieved
+comparable downstream performance when trained with other objectives (masked
+language modeling, image-text matching, cross-modal attention).
+
+The obvious approach for training video models is to train on videos. Multiple
+proposals~\citep{portilloquintero2021clipvidret,luo2022clip4clip} extend image
+and language models for video retrieval in a simple way by mapping sequences of
+image representations learned from CLIP into a fixed video representation, and
+computing similarity between the CLIP text encoding and the learned video
+encoding. \citet{portilloquintero2021clipvidret} use frozen CLIP encodings, while
+\citet{luo2022clip4clip} train the CLIP encodings in an end-to-end fashion, with
+visual features going . This approach leverages the huge pre-training of
+CLIP which provide strong multimodal representations.
+
+\citet{bain2021frozen} train separate visual encoder for image and video and text encoder for captions
+
+\cite{xu2021videoclip}
+
+\cite{luo2022clip4clip}
+
+
+%\citet{lin2022evl} -- train video recognition models from frozen CLIP features
+\citet{lei2021clipbert} -- temporal fusion and sequential frames and word embeddings
+
+\citet{alayrac2022flamingo} -- train on combination of image-text, video-text pairs datasets. Vision encoder is CLIP. Temporal embeddings are combined with visual features and processed via a resampling module, allowing for a variable number of frames to produce a fixed size visual output, which is advantageous for longer videos.
 
 \section{Temporal Reasoning}
 \label{sec:tempreason}
@@ -302,9 +387,14 @@ Models which take into account temporal nature and train/finetune on video datas
 All about literature on temporal reasoning. From video perspective, from
 language perspective
 
-\cite{allen1983interval}
+Traditional methods
 \cite{bruce1972temporalqa}
+\cite{allen1983interval}
+\cite{pustejovsky2003timeml}
+
+Current methods, NN
 \cite{zhou2021tracie}
+
 
 %\section{Video Question Answering}
 %\label{sec:vidqa}

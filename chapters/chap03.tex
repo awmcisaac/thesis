@@ -7,10 +7,11 @@ in detail.  We first look at two video question answering datasets,
 STAR~\citep{wu2021star} and NExT-QA~\citep{xiao2021nextqa}, and then discuss the
 model we adapt for use in our experiments, Merlot
 Reserve~\citep{zellers2022mreserve}. STAR is tested zero-shot in Merlot Reserve,
-and achieves state of the art performance. In
-Chapters~\ref{chap:method,chap:results} we test how we can modify this model to
-improve its temporal reasoning ability, while keeping strong performance on the
-STAR dataset. We further use NExT-QA to test the generalisability of our model.
+and achieves state of the art performance. In \cref{chap:method,chap:results}
+we test how we can modify this model to improve its temporal reasoning ability,
+while keeping strong performance on the STAR dataset. We further use NExT-QA to
+test the generalisability of our model.
+%TODO: Use NexT-QA ATP\textsubscript{hard} subset, if authors get back to me.
 
 \section{STAR}
 
@@ -19,7 +20,7 @@ It uses videos taken from the Charades~\citep{sigurdsson2016charades} dataset,
 which describe daily life actions or activities in indoor scenes. A video
 is annotated with actions and timestamps. STAR builds a detailed scene annotation
 from these videos. A situation is a description of entities, events, movements,
-and environments. An example is shown in Fig.~\ref{fig:star}.
+and environments. An example is shown in \cref{fig:star}.
 
 \begin{figure}[htpb]
 	\centering
@@ -60,7 +61,7 @@ NExT-QA~\citep{xiao2021nextqa} is another video question answering dataset with
 a focus on a wider range of temporal actions. Where STAR asks questions that
 test only before/after temporal relations, questions in NExT-QA challenge the
 model to reason about causal actions as well as temporal relations such as
-`when` (Fig.~\ref{fig:nextqa}).
+`when` (\cref{fig:nextqa}).
 
 \begin{figure}[htpb]
 	\centering
@@ -81,11 +82,11 @@ and audio. The architecture consists of independent encodings of each modality,
 via a Vision Transformer~\citep{dosovitskiy2021vit}, an Audio Spectrogram
 Transformer~\citep{gong2021ast}, and a Transformer span encoder, which computes
 targets from an embedding of a candidate text span
-(Fig.~\ref{fig:mreservearch}). This is then fed into a joint Transformer encoder
+(\cref{fig:mreservearch}). This is then fed into a joint Transformer encoder
 for all modalities and timesteps.
 
 The specific pre-training objective is called contrastive span training
-(Fig.~\ref{fig:contrastivespan}). For each frame aligned with an image, text,
+(\cref{fig:contrastivespan}). For each frame aligned with an image, text,
 and audio encoding, a region of text and audio is masked out. The model must
 maximise its similarity only to an independent encoding of the text and audio.
 In pre-training the model learns to predict spans of text and audio in two
