@@ -283,7 +283,7 @@ either from scratch, or finetuning from a pretrained vision and language model.
 This section explores both methods.
 
 \subsection{Adapted from Vision and Language Models}
-\label{sec:adaptvlm}
+\label{ssec:adaptvlm}
 
 Pre-trained generative language models have shown strong capabilities for
 in-context learning~\citep{brown2020gpt3}. In-context learning provides a number
@@ -338,7 +338,6 @@ understanding. They find a subset of NExT-QA~\citep{xiao2021nextqa} questions
 that ``truly necessitate video-level understanding compared with the original
 dataset''. We test on both NExT-QA and this subset, denoted
 ATP\textsubscript{hard}, in our experiments.
-%TODO: Delete last few lines if authors don't respond
 
 %Either train with explicit temporal tokens (e.g.~\citet{lin2022evl} with temporal convolution and cross-frame attention, \citet{lei2021clipbert} with temporal fusion and sequential frames and word embeddings) or use language to steer temporal modality \citep{wang2022vidil,zeng2023socratic}.
 
@@ -347,11 +346,10 @@ ATP\textsubscript{hard}, in our experiments.
 
 
 \subsection{Training on Videos}
-\label{sec:vidtrain}
+\label{ssec:vidtrain}
 
 %Models which take into account temporal nature and train/finetune on video datasets
 
-Models 
 Since one of the questions we are interested in is how contrastive training
 affects the temporal reasoning ability of video language models, this section
 mainly explores models trained with a contrastive objective. We note, however,
@@ -384,17 +382,73 @@ CLIP which provide strong multimodal representations.
 \section{Temporal Reasoning}
 \label{sec:tempreason}
 
-All about literature on temporal reasoning. From video perspective, from
-language perspective
 
-Traditional methods
-\cite{bruce1972temporalqa}
-\cite{allen1983interval}
-\cite{pustejovsky2003timeml}
+\noindent\textbf{In Video.}\hspace{0.2cm}
+Most computer vision has studied how to model concepts and relationships
+between them in the world, e.g. through object detection and segmentation in
+images. To go one step further into the video domain, we need to study how to
+model event knowledge. That is, how do we model recurring and meaningful
+patterns and sequences of behaviour? A model must understand activities and
+their components, as well as the temporal ordering of these activities to find
+causal dynamics between them~\citep{elman2019event}. New datasets and models
+have been proposed in recent years that aim to find computational models
+capable of this event knowledge through temporal reasoning. 
 
-Current methods, NN
-\cite{zhou2021tracie}
+As discussed in~\cref{ssec:adaptvlm}, some models can still perform well on
+video datasets with just a single frame given to the model. This suggests a
+requirement for more challenging datasets and tasks to learn temporal ordering
+of events. \citet{grauman2022ego4d} create Ego4D, a dataset of over 3000 hours
+of egocentric (first-person) video, with several associated tasks requiring
+understanding of how objects change state over time, remembering temporal
+windows for objects appearing in scenes, and prediction of future actions in
+videos, requiring causal understanding of actions and events. For example, a
+cooking video may predict the subsequent steps to making a pizza when presented
+with the first steps of rolling and kneading dough. The authors identify
+normalized pointwise mutual information as a means to inform the temporal
+structure of sequences of actions over time, with certain action sequences
+favoured over others. Learning this structure of action pairs is key to a
+model's performance on these tasks.\\
 
+\noindent\textbf{In Language.}\hspace{0.2cm}
+There is a long history of studying temporal expressions in linguistics.
+~\citet{moens1988temporal} claim that \textit{when}-clauses ``establish a
+temporal focus'' between two events, contingent on e.g. a causal link, as in
+the unnatural use of \textit{when} in ``*When my car broke down, the sun set.''
+Any representation looking to model temporal descriptions must therefore, for
+\textit{when}-clauses and similar phenomena, model contingency, rather than
+just temporality.
+
+\citet{allen1983interval} suggests a model of temporal reasoning based on
+intervals and relations among them. Given two events, the temporal relations
+between them can be expressed in many ways based on the time intervals of the
+events occurring. We explore the use of this temporal representation further
+in~\cref{ssec:data}. \citet{zhou2021tracie} propose a dataset for natural
+language inference of temporal relations for before and after relations. They
+find that current models struggled to predict temporal relationships between
+explicit and implicit events, and that a neuro-symbolic method improved 
+reasoning ability by estimating event durations to infer implicit end times.\\
+
+%Traditional methods
+%\cite{bruce1972temporalqa}
+%\cite{pustejovsky2003timeml}
+
+%Pre-trained LLMs struggle on temporal reasoning, need finetuning.~\citet{vashishtha2020temporal}
+
+\noindent\textbf{Probing video datasets.}\hspace{0.2cm}
+\citet{sevilla-lara2021temporal} create a perceptual test to discover action
+classes in videos that require temporal information to identify. The authors
+shuffle frames in time from action classification datasets, and present human
+annotators with the shuffled or control videos, where there is no shuffling.
+Action classes are then identified by the largest average performance
+degradation of action classification between the two groups. They train video
+models on a temporal and static dataset, the 50 classes where human accuracy
+decreases most and least respectively, and find that training on the temporal
+dataset produces features that are more sensitive to temporal ordering, and
+therefore are stronger temporal features.
+We extend this finding and explore the performance of various models with
+frames shuffled on video question answering datasets in \cref{sec:probe}, and
+develop a novel method for training video language models on a temporal-aware
+dataset in \cref{sec:setup}.
 
 %\section{Video Question Answering}
 %\label{sec:vidqa}
