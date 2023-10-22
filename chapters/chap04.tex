@@ -3,9 +3,10 @@
 \label{chap:method}
 
 \section{Probing Temporal Ability}
-\label{sec:prob}
+\label{sec:probe}
 
 %\XXX{With the current limited writeup, Ondrej cannot comment yet. Some critical remarks: always try hard to complement other people's scores (which you can cite from a paper) with \emph{your own measurement} of their outputs. Typically, these reported and re-measured numbers will differ and it is always important to know them for a reliable comparison with your own scores.}
+
 
 Table on changing temporal indicators improving performance on STAR
 \begin{table}[htpb] 
@@ -30,6 +31,7 @@ Switch before/after: 42.92 vs 42.33 with correct temporal ordering
 
 Use before/after as MASKed answers: 50.86 (basically random)
 
+Shuffling frame approach is supported by previous probing efforts for video datasets, e.g.~\citet{sevilla-lara2021temporal}
 \begin{table}[htpb]
     \centering
     \caption{Shuffle frames (randomly)}
@@ -41,6 +43,26 @@ Use before/after as MASKed answers: 50.86 (basically random)
         Shuffle & 42.08 & 42.58 & 47.28 & 49.2 & 43.28 (45.29) \\
     \end{tabular}
 \end{table}
+
+\subsection{VideoCLIP STAR results}
+\label{sec:videoclip}
+
+Zero-shot, statements as in Merlot Reserve
+
+Validation set: 42.84 \\
+Validation sequence only: 42.86 \\
+Validation sequence only switch before/after in statement: 41.91 \\
+Validation with shuffled frames (all): 36.08 \\
+Validation with shuffled frames (seq only): 36.31 \\
+
+Use before/after as masked answers: 50.11
+
+Shuffled frames are from features extracted every 30 frames, so
+generally more frames are chosen than Merlot Reserve (8), as
+average video time is %TODO: avg video time.
+Bigger drop-off in performance, but still much better than random
+chance.
+
 
 \section{Experiment Setup}
 \label{sec:setup}
