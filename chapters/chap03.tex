@@ -7,13 +7,14 @@ in detail.  We first look at two video question answering datasets,
 STAR~\citep{wu2021star} and NExT-QA~\citep{xiao2021nextqa}, and then discuss the
 model we adapt for use in our experiments, Merlot
 Reserve~\citep{zellers2022mreserve}. STAR is tested zero-shot in Merlot Reserve,
-and achieves state of the art performance. In \cref{chap:method,chap:results}
+and achieves state of the art performance. In \cref{chap:setup,chap:results}
 we test how we can modify this model to improve its temporal reasoning ability,
 while keeping strong performance on the STAR dataset. We further use NExT-QA to
 test the generalisability of our model.
 %TODO: Use NexT-QA ATP\textsubscript{hard} subset as well.
 
 \section{STAR}
+\label{sec:star}
 
 STAR~\citep{wu2021star} is a dataset for situated reasoning in real-world videos.
 It uses videos taken from the Charades~\citep{sigurdsson2016charades} dataset,
@@ -22,7 +23,7 @@ is annotated with actions and timestamps. STAR builds a detailed scene annotatio
 from these videos. A situation is a description of entities, events, movements,
 and environments. An example is shown in \cref{fig:star}.
 
-\begin{figure}[htpb]
+\begin{figure}[tp]
 	\centering
 	\includegraphics[width=0.8\textwidth]{star}
 	\caption{An example instance from the STAR dataset, with the four question
@@ -63,7 +64,7 @@ test only before/after temporal relations, questions in NExT-QA challenge the
 model to reason about causal actions as well as temporal relations such as
 `when` (\cref{fig:nextqa}).
 
-\begin{figure}[htpb]
+\begin{figure}[tp]
 	\centering
 	\includegraphics[width=0.8\textwidth]{nextqa}
 	\caption{Example NExT-QA video and question types.
@@ -93,7 +94,7 @@ In pre-training the model learns to predict spans of text and audio in two
 cases: predicting audio where frames and text is provided; and predicting text
 where frames and audio are provided. 
 
-\begin{figure}[htpb]
+\begin{figure}[tp]
 	\centering
 	\begin{subfigure}[b]{0.45\textwidth}
 		\centering

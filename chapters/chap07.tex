@@ -1,0 +1,34 @@
+%! TeX root = ../charles/en/thesis.tex
+\chapter{Temporal Ability of Vision and Language Models}
+\label{chap:discussion}
+
+Discussion of results, thoughts on contrastive pretraining, other insights/ideas
+as they come up.
+
+%Different models have different approaches to modelling temporal awareness for
+%videos, even within the contrastive pretraining approach. Merlot
+%Reserve~\citep{zellers2022mreserve} relies on an alignment between subtitles,
+%audio, and video frames to keep consistent temporal awareness with the
+%contrastive span objective, but its architecture lacks a specific module for
+%temporal reasoning. Similarly, VideoCLIP~\citep{xu2021videoclip} relies on
+%temporally overlapping video-text pairs to train its contrastive objective
+%function with an otherwise simple architecture.
+%
+%In contrast, other models explicitly include temporal modules in the
+%architecture, either through learnt temporal positional
+%encodings~\citep{alayrac2022flamingo}, 3D linear projections of video
+%features~\citep{luo2022clip4clip}, temporal convolutions~\citep{???},
+%cross-attention between frames~\citep{???}, or combinations
+%thereof~\citep{lin2022evl,bain2021frozen}. \citet{lin2022evl} find that the effect of temporal
+%information varies greatly depending on the dataset, and analysis on
+%Something-Something-V2, which relies more heavily on temporal information,
+%shows that including a single temporal module improves accuracy by over 10\%,
+%while combining sources of temporal information provides marginal extra
+%performance gain.
+%
+%
+%Faithful temporal reasoning may be made possible by chaining reasoning steps in
+%language models, e.g.~\citet{creswell2022faithful}
+%
+%How to connect symbolic models of temporal reasoning with current work in
+%developing language and vision models is difficult.

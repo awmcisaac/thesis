@@ -160,7 +160,7 @@ sequence. The model is shown in \cref{fig:vit}. The Vision Transformer matched
 or exceeded state of the art on many image classification datasets, while being
 trained for comparatively less time.
 
-\begin{figure}[htpb]
+\begin{figure}[tp]
 	\centering
 	\includegraphics[width=0.8\textwidth]{vit.png}
 	\caption{The Vision Transformer splits an image into patches, embeds them,
@@ -186,13 +186,6 @@ from. \citet{radford2021clip} use a batch size of 32768. The text encoder is a
 Transformer~\citep{vaswani2017attention}, and their best model uses a Vision
 Transformer~\citep{dosovitskiy2021vit} as the image encoder.
 
-\begin{figure}[htpb]
-	\centering
-	\includegraphics[width=\textwidth]{CLIP.png}
-	\caption{CLIP. From~\citet{radford2021clip}}
-	\label{fig:clip}
-\end{figure}
-
 The model enables zero-shot transfer to many downstream computer vision
 classification tasks by predicting the most probable (image, text) pair when
 given an image and a set of text prompts with each class embedded in the prompt
@@ -201,9 +194,16 @@ by finetuned models. The representations learned by the contrastive
 pre-training objective have wide applicability to a range of VLM and Video
 Language Models, particularly as frozen features from which to add smaller
 modules on top for adapting to vision and language
-tasks~\citep{alayrac2022flamingo,lin2022evl,lei2021clipbert}. We discuss some
+tasks~\citep{alayrac2022flamingo,lin2022evl,luo2022clip4clip}. We discuss some
 of these models in \cref{sec:vidlmb}, and consider the limitations and possible
 expansions of the contrastive pre-training method in \cref{sec:contrastive}.
+
+\begin{figure}[tp]
+	\centering
+	\includegraphics[width=\textwidth]{CLIP.png}
+	\caption{CLIP. From~\citet{radford2021clip}}
+	\label{fig:clip}
+\end{figure}
 
 
 \section{Vision and Language Models}
@@ -357,21 +357,21 @@ that other models~\citep{lei2021clipbert} (and others!!) have achieved
 comparable downstream performance when trained with other objectives (masked
 language modeling, image-text matching, cross-modal attention).
 
-The obvious approach for training video models is to train on videos. Multiple
-proposals~\citep{portilloquintero2021clipvidret,luo2022clip4clip} extend image
-and language models for video retrieval in a simple way by mapping sequences of
-image representations learned from CLIP into a fixed video representation, and
-computing similarity between the CLIP text encoding and the learned video
-encoding. \citet{portilloquintero2021clipvidret} use frozen CLIP encodings, while
-\citet{luo2022clip4clip} train the CLIP encodings in an end-to-end fashion, with
-visual features going . This approach leverages the huge pre-training of
-CLIP which provide strong multimodal representations.
+The obvious approach for training video models is to train on videos.
+\citet{luo2022clip4clip} extend image and language models to video retrieval in
+a simple way by mapping sequences of image representations learned from CLIP
+into a fixed video representation, and computing similarity between the CLIP
+text encoding and the learned video encoding. They find that training on a
+medium-sized video dataset starting from the CLIP encodings improves zero-shot
+and finetuning results on multiple downstream datasets, and that attempts to
+model the temporal dependency between frames (using 3D linear projections for
+video features, and using similarity measurements that model sequentiality for
+the video and text similarity measure) from the base CLIP model trained only on
+image and text pairs do not produce better results on video tasks.
 
 \citet{bain2021frozen} train separate visual encoder for image and video and text encoder for captions
 
 \cite{xu2021videoclip}
-
-\cite{luo2022clip4clip}
 
 
 %\citet{lin2022evl} -- train video recognition models from frozen CLIP features
@@ -404,7 +404,7 @@ windows for objects appearing in scenes, and prediction of future actions in
 videos, requiring causal understanding of actions and events. For example, a
 cooking video may predict the subsequent steps to making a pizza when presented
 with the first steps of rolling and kneading dough. The authors identify
-normalized pointwise mutual information as a means to inform the temporal
+normalised pointwise mutual information as a means to inform the temporal
 structure of sequences of actions over time, with certain action sequences
 favoured over others. Learning this structure of action pairs is key to a
 model's performance on these tasks.\\
@@ -422,7 +422,7 @@ just temporality.
 intervals and relations among them. Given two events, the temporal relations
 between them can be expressed in many ways based on the time intervals of the
 events occurring. We explore the use of this temporal representation further
-in~\cref{ssec:data}. \citet{zhou2021tracie} propose a dataset for natural
+in~\cref{sec:data}. \citet{zhou2021tracie} propose a dataset for natural
 language inference of temporal relations for before and after relations. They
 find that current models struggled to predict temporal relationships between
 explicit and implicit events, and that a neuro-symbolic method improved 
@@ -446,9 +446,9 @@ decreases most and least respectively, and find that training on the temporal
 dataset produces features that are more sensitive to temporal ordering, and
 therefore are stronger temporal features.
 We extend this finding and explore the performance of various models with
-frames shuffled on video question answering datasets in \cref{sec:probe}, and
+frames shuffled on video question answering datasets in \cref{chap:probe}, and
 develop a novel method for training video language models on a temporal-aware
-dataset in \cref{sec:setup}.
+dataset in \cref{chap:setup}.
 
 %\section{Video Question Answering}
 %\label{sec:vidqa}
