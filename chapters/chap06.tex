@@ -1,3 +1,115 @@
 %! TeX root = ../charles/en/thesis.tex
 \chapter{Results}
 \label{chap:results}
+
+\begin{table}[htpb]
+	\centering
+	\caption{Post-pretraining results on STAR}
+	\label{tab:label}
+	\begin{tabular}{lccccc}
+        \toprule
+        \multicolumn{1}{c}{}        & \multicolumn{4}{c}{Question Types}        & \multicolumn{1}{c}{} \\
+                                      \cmidrule(){2-5}
+                                    & I           & S        & P          & F           & Mean \\
+        \cmidrule(r){1-1}             \cmidrule(){2-5}                          \cmidrule(l){6-6}
+        Merlot Reserve (val)        & 43.12       & 42.33    & 43.27      & 47.14       & 43.01 (43.97) \\
+		Swapped before/after		&			  & 42.92    &			  &				& \\
+		Masked temporal expressions &			  & 50.86    &			  &				& \\
+		Shuffled frames				& 42.08		  & 42.58	 & 47.28	  & 49.20		& 38.47 \\
+        \cmidrule(r){1-1}             \cmidrule(){2-5}                          \cmidrule(l){6-6}
+		5500 steps					& 35.86		  & 40.43	 & 46.79	  & 45.10		& 39.77 \\
+		Swapped before/after		&			  & 39.88	 &			  &				& \\
+		Masked temporal expressions &			  & 43.08    &			  &				& \\
+		Shuffled frames				& 36.27		  & 37.90	 & 51.52	  & 39.39		& 38.47 \\
+        \cmidrule(r){1-1}             \cmidrule(){2-5}                          \cmidrule(l){6-6}
+		19500 steps					& 39.16		  & 41.83    & 48.55	  & 45.31		& 41.76 \\
+		Swapped before/after		&			  & 41.27	 &			  &				& \\
+		Masked temporal expressions &			  & 42.30    &			  &				& \\
+		Shuffled frames				& 39.32		  & 42.30	 & 52.72	  & 49.18		& 42.68 \\
+        \cmidrule(r){1-1}             \cmidrule(){2-5}                          \cmidrule(l){6-6}
+		22500 steps					& 40.95		  & 43.20    & 50.32	  & 48.16		& 43.41 \\
+		Swapped before/after		& 			  &	42.89    &			  &				& \\
+		Masked temporal expressions &			  & 43.08    &			  &				& \\
+		Shuffled frames				& 41.83		  & 43.53	 & 52.88	  & 52.24		& 44.38 \\
+		\midrule
+		\midrule
+		\multicolumn{6}{c}{Performance degrades with masking only temporal expressions} \\
+		20000 steps					& 30.82		  &	35.02	 & 38.14	  &	37.76		& 34.07 \\
+		Swapped before/after		&			  &	34.69	 &			  &				& \\
+		Masked temporal expressions	&			  &			 &			  &				& \\
+		Shuffled frames				&   &  &   &  & \\
+        \cmidrule(r){1-1}             \cmidrule(){2-5}                          \cmidrule(l){6-6}
+		41000 steps					& 30.86		  & 34.69    & 37.82      & 38.57       & 33.94 \\
+		Swapped before/after		&			  & 34.33	 &		      &				& \\
+		Masked temporal expressions &			  & 43.20	 &			  &				& \\
+		Shuffled frames				& 31.15		  & 34.41	 & 37.18	  & 38.16		& 33.81 \\
+		\midrule
+		\midrule
+		\multicolumn{6}{c}{Mixed temporal sparse} \\
+		25000 steps					& 38.99 & 40.3 & 48.2 & 51.2 & 41.3 \\
+		Swapped before/after		&		& 39.65 &	&		& \\
+		Shuffled frames				& 38.41 & 40.52 & 49.2 & 50.2 & 41.2 \\
+		\midrule
+		\midrule
+		\multicolumn{6}{c}{Updated charades\_parser} \\
+		13500 steps					& 39.41 & 39.79 & 47.76 & 46.94 & 40.86 \\
+		Swapped before/after		&		& 40.83	&		&		&	\\
+		Shuffled frames				&  &  &  &  &  \\
+        \bottomrule
+	\end{tabular}
+\end{table}
+
+%NExT-QA results (\cref{tab:nextqa}). Questions are interesting, generally a bit of a drop, but huge loss in performance for counting questions.
+
+\begin{table}[htpb]
+	\centering
+	\caption{NExT-QA Results on Merlot Reserve. Causal How, Causal Why,
+	Temporal Current, Temporal Next, Temporal Previous, Descriptive Location,
+	Descriptive Count, Descriptive Other}
+	\label{tab:nextqa}
+	\begin{tabular}{lccccccccc}
+		\toprule
+		\multicolumn{1}{c}{}  & \multicolumn{8}{c}{Question Types} & \multicolumn{1}{c}{}   \\
+                                      \cmidrule(){2-9}
+							  &  CH  &  CW  &  TC  &  TN  &  TP  &  DL  &  DC  &  DO  & Mean \\
+		\cmidrule(r){1-1}             \cmidrule(){2-9}						 \cmidrule(){10-10}
+		MReserve (val)        & 33.2 & 36.7 & 27.8 & 35.6 & 40.7 & 35.0 & 41.0 & 42.6 & 35.0 \\
+		%Shuffled Frames		  & 33.5 & 35.7 & 28.9 & 36.0 & 36.9 & 35.0 & 40.0 & 38.9 & 34.6 \\
+		With Questions		  & 35.3 & 34.0 & 29.8 & 31.4 & 30.8 & 15.8 & 34.8 & 25.9 & 32.2 \\
+		\midrule
+		ATP-Hard			  &	28.9 & 27.5 & 29.8 & 25.8 &	17.2 &  	&      &      & 27.5 \\
+		%Shuffled Frames		  & 29.7 & 27.7 & 30.0 & 24.7 & 24.1 &      &      &      & 27.6 \\
+		\midrule
+		% Sparse 20000 ATP	  &	23.2 & 25.8 & 26.4 & 21.7 &	10.3 &  	&      &      & 24.3 \\
+		% Shuffled Frames		  & 23.2 & 26.2 & 27.0 & 20.6 & 10.3 &      &      &      & 24.3 \\
+		% \midrule
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+
+\begin{table}[tp] 
+    \centering 
+    \caption{Test of Time results}
+    \label{tab:tot_star} 
+    \begin{tabular}{lccccc} 
+        \toprule
+        \multicolumn{1}{c}{}    & \multicolumn{4}{c}{Question Types}            & \multicolumn{1}{c}{} \\
+                                    \cmidrule(){2-5}
+                                & I           & S        & P          & F           & Mean \\
+        \cmidrule(r){1-1}           \cmidrule(){2-5}                                    \cmidrule(l){6-6}
+        VideoCLIP (val)         & 39.66       & 42.86    & 48.72      & 50.82       & 42.84 \\
+		Charades TACT (val)		& 45.79		  & 51.28	 & 61.06	  & 60.00		& 50.89 \\
+		Swapped before/after    &			  &	49.30	 &			  &				& \\
+		Masked temporal exprs   &			  & 52.54    &			  &				& \\
+		Shuffled videos			& 37.45		  & 38.29	 & 43.27	  & 44.49		& 38.87 \\
+		Shuffled frames			& 45.25		  & 50.11    & 57.05      & 58.78		& 49.68 \\
+        \cmidrule(r){1-1}           \cmidrule(){2-5}                                    \cmidrule(l){6-6}
+		TEMPO TACT (val)		& 39.49		  & 39.88	 & 47.44	  & 46.33		& 40.86 \\
+		Swapped before/after    &			  & 37.73    &			  &				& \\
+		Masked temporal exprs   &			  & 57.53    &			  &				& \\
+		Shuffled videos			& 34.15		  & 33.27	 & 39.26	  & 37.14		& 34.36 \\
+		Shuffled frames			& 38.49		  & 38.09	 & 44.55	  & 42.25		& 39.08 \\
+        \bottomrule
+    \end{tabular} 
+\end{table} 
