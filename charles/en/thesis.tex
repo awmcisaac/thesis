@@ -57,6 +57,8 @@
 \usepackage{subcaption}
 \usepackage[capitalise]{cleveref}
 \usepackage{lscape}
+\usepackage[acronym,toc]{glossaries} % for list of abbreviations
+\glsdisablehyper
 
 % Ondrej's macros for commenting
 \usepackage[normalem]{ulem} % sout, uline
@@ -106,7 +108,7 @@ Abstract.
 
 % 3 to 5 keywords (recommended), each enclosed in curly braces
 \def\Keywords{%
-{multimodal} {video LM} {temporal reasoning}
+	{multimodal} {video LM} {temporal reasoning} {contrastive reasoning}
 }
 
 %% The hyperref package for clickable links in PDF and also for storing
@@ -117,6 +119,9 @@ Abstract.
 
 % Definitions of macros (see description inside)
 \include{macros}
+
+% List of abbreviations
+\include{../../abbrev}
 
 % Title page and various mandatory informational pages
 \begin{document}
@@ -151,7 +156,9 @@ Abstract.
 
 %%% Abbreviations used in the thesis, if any, including their explanation
 %%% In mathematical theses, it could be better to move the list of abbreviations to the beginning of the thesis.
-\chapwithtoc{List of Abbreviations}
+%\chapwithtoc{List of Abbreviations}
+
+\printglossary[type=\acronymtype, title=List of Abbreviations, toctitle=List of Abbreviations]
 
 %%% Attachments to the master thesis, if any. Each attachment must be
 %%% referred to at least once from the text of the thesis. Attachments

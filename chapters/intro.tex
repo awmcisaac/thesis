@@ -1,50 +1,108 @@
 %! TeX root = ../charles/en/thesis.tex
 
-A bit on how vision and language models perform well on many benchmarks. Then
-talk about videos. How vision and language models have been extended to video
-tasks via extra training on paired video-caption datasets, frozen LMs.
+%A bit on how vision and language models perform well on many benchmarks. Then
+%talk about videos. How vision and language models have been extended to video
+%tasks via extra training on paired video-caption datasets, frozen LMs.
+%
+%Introduce the problem. Main question: do they learn temporal reasoning? Are
+%models able to learn the difference between action X happening before action Y,
+%versus action X happening after action Y.
+%
+%Define vision and language model to be the class of models of which a subset is
+%video and language models.
+%
+%What do we do? - Discover that the answer is no, at least for Merlot Reserve.
+%How? Masking temporal indicator in STAR, no idea if it is before/after.
+%\XXX{Ondrej: A question for you or Raffa: Discovering that the answer is no is actually fortunate, the easier option. What is unclear is how would we convince ourselves that the answer is yes. What methodology would we use?}
+%
+%Perhaps this should be explored for some other models as well (e.g. ClipBERT
+%\cite{lei2021clipbert}, Flamingo \cite{alayrac2022flamingo}, Frozen CLIP
+%\cite{lin2022evl}, VidIL \cite{wang2022vidil}, Socratic Models
+%\cite{zeng2023socratic}, VideoCLIP \cite{xu2021videoclip})
+%\XXX{Ondrej: yes! But primarily focus on the promised Merlot Reserve. If you can easily (one push of a button) do more, do as many as you can.}
+%
+%So, mask temporal indicators in scripts, add negatives for cues.
+%\XXX{Ondrej: without knowing the details, I can't imagine any such cues yet. Maybe provide already an example in the introduction.}
+%E.g. before -\textgreater [after, at the same time, while]
+%Or possibly masking actions, how to generate negatives for this isn't clear.
+%Would need multiple masks potentially, quite complicated.
+%
+%Train with either YT-Temporal-1B or Charades. Does it improve performance on
+%answering questions that require temporal information? If Charades, probably
+%need to do other datasets as well, e.g. NextQA, Epic Kitchens.
+%
+%Hopefully the answer is that it performs better.
+%\XXX{For ``better'' you need a continuous measure (which you will certainly and easily have), and an improvement in this measure. Yet my high-level methodological question remains: What score in this measure would the model need in order to say ``the model does learn temporal reasoning''.}
 
-Introduce the problem. Main question: do they learn temporal reasoning? Are
-models able to learn the difference between action X happening before action Y,
-versus action X happening after action Y.
+Research in \acrfullpl{vlm} has bloomed over recent years. With larger and
+larger datasets and models, particularly based on the
+Transformer architecture~\citep{vaswani2017attention}, the performance and
+capabilities of \acrshortpl{vlm} have increased on common multimodal tasks such
+as visual question answering, image captioning, visual dialogue generation and
+image-text retrieval
+\citep{alayrac2022flamingo,li2022blip,li2023blip2,radford2021clip}.
 
-What do we do? - Discover that the answer is no, at least for Merlot Reserve.
-How? Masking temporal indicator in STAR, no idea if it is before/after.
-\XXX{Ondrej: A question for you or Raffa: Discovering that the answer is no is actually fortunate, the easier option. What is unclear is how would we convince ourselves that the answer is yes. What methodology would we use?}
+\Acrfullpl{vidlm} are \acrshortpl{vlm} which are capable of modelling video.
+This provides the additional challenge of modelling long sequences of frames,
+and reasoning temporally across these images. Models must be able to recognise
+how a scene changes over time with respect to not just objects and relations
+between them, but to model the causal link between actions and events. For
+tasks such as video question answering, where a model is given a video and a
+question, and must pick the correct answer out of a number of multiple choice
+options, to answer questions such as ``What did the man do after opening the
+door?'', or ``Why was the toddler crying at the end of the video?'', it must be
+able to relate potentially distant events to one another and reason about them.
+Even if a model is able to select the correct option, how do we know that it
+has applied the correct reasoning steps required to make its prediction?
+\citet{lei2023revealing} and \citet{buch2022revisiting} show that models
+trained with just a single frame can match or outperform the state of the art
+on multiple video and language tasks. This suggests that existing evaluation
+datasets have a ``static appearance bias'' without challenging enough questions
+or options that would require event-level understanding to distinguish between
+them, and potentially that pre-training datasets and objectives are not
+incentivised to learn temporal information~\cite{momeni2023verbs}.
+\Acrshortpl{vidlm} are often trained using contrastive learning, where the
+objective is to correctly match video-text pairs to each other, while repelling
+non-matching pairs in the joint embedding space.
 
-Perhaps this should be explored for some other models as well (e.g. ClipBERT
-\cite{lei2021clipbert}, Flamingo \cite{alayrac2022flamingo}, Frozen CLIP
-\cite{lin2022evl}, VidIL \cite{wang2022vidil}, Socratic Models
-\cite{zeng2023socratic}, VideoCLIP \cite{xu2021videoclip})
-\XXX{Ondrej: yes! But primarily focus on the promised Merlot Reserve. If you can easily (one push of a button) do more, do as many as you can.}
+In this thesis, we design perturbation experiments to look at the temporal
+reasoning abilities of multiple \acrlongpl{vidlm} trained with a contrastive
+objective function. Using questions which require sequential information from
+the STAR dataset~\cite{wu2021star}, a \acrfull{vidqa} dataset which tests
+situated reasoning questions in real-world videos, we find that these models do
+not learn to distinguish between actions occurring before or actions occurring
+after one another.
 
-So, mask temporal indicators in scripts, add negatives for cues.
-\XXX{Ondrej: without knowing the details, I can't imagine any such cues yet. Maybe provide already an example in the introduction.}
-E.g. before -\textgreater [after, at the same time, while]
-Or possibly masking actions, how to generate negatives for this isn't clear.
-Would need multiple masks potentially, quite complicated.
-
-Train with either YT-Temporal-1B or Charades. Does it improve performance on
-answering questions that require temporal information? If Charades, probably
-need to do other datasets as well, e.g. NextQA, Epic Kitchens.
-
-Hopefully the answer is that it performs better.
-\XXX{For ``better'' you need a continuous measure (which you will certainly and easily have), and an improvement in this measure. Yet my high-level methodological question remains: What score in this measure would the model need in order to say ``the model does learn temporal reasoning''.}
+Following this finding, we propose a method for learning temporal reasoning
+abilities, using targeted hard negatives in the contrastive objective to
+improve the model's understanding of temporal relations. For example, in a
+video that has been annotated ``someone is dressing before taking a cup from
+somewhere``, we create hard negatives that modify the annotation in the
+temporal dimension only (e.g. ``someone is dressing after taking a cup from
+somewhere''), which is added to the batch of video-text pairs as a non-matching
+pair. We evaluate our approach on multiple \acrshort{vidqa} datasets to test
+different types of temporal understanding and the generalisability of our
+approach. We also explore the effect of using a wider range of temporal
+relations than just before and after to model more fine-grained relations using
+relations from Allen's Interval Algebra~\citep{allen1983interval}, defining a
+range of temporal relation types that capture possible relations between
+actions.
 
 The rest of this thesis is organised as follows:
 
 \begin{itemize}
-	\item \Cref{chap:bg} goes into the background of language models,
-		image recognition models, and vision and language models which combine
-		the two modalities. We discuss one popular method, Contrastive
-		Language-Image Pretraining (CLIP), and one key downstream task, visual
-		question answering. We finish the chapter with a broad overview of video
-		language models.
+	\item \Cref{chap:bg} goes into the background of language models, image
+		recognition models, and \acrfullpl{vlm} which combine the two
+		modalities. We discuss one popular method for training, \Acrfull{clip},
+		and one key downstream task, \acrlong{vqa}. We finish the chapter with
+		a broad overview of video language models and an overview of the
+		temporal reasoning literature in video and in language.
 	\item \Cref{chap:rel} explores related work on video language models,
 		with a particular focus on work that explores the impact of contrastive
-		pretraining. We also look at other approaches for instilling temporal
+		pre-training. We also look at other approaches for instilling temporal
 		reasoning in these models.
-	\item In \cref{chap:dataset} we look at the main datasets used, STAR and NExT-QA.
+	\item In \cref{chap:dataset} we look at the main datasets used, STAR and
+		NExT-QA, as well as the particular pre-trained models that we work on.
 	\item In \cref{chap:probe} we test the current temporal reasoning abilities
 		of multiple video language models on the STAR dataset.
 	\item \Cref{chap:setup} details experiments that show how current
@@ -53,7 +111,7 @@ The rest of this thesis is organised as follows:
 		contrastive training.
 	\item \cref{chap:results} shows performance of our model on STAR and NExT-QA.
 	\item \cref{chap:discussion} discusses the use of contrastive
-		pretraining methods in video and language models, and how our method
+		pre-training methods in video and language models, and how our method
 		affects performance of temporal reasoning systems.
 	\item Finally, the \nameref{chap:conclusion} summarises our findings.
 \end{itemize}

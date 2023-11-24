@@ -172,10 +172,11 @@
   abstract = "We present the task of Spatio-Temporal Video Question Answering, which requires intelligent systems to simultaneously retrieve relevant moments and detect referenced visual concepts (people and objects) to answer natural language questions about videos. We first augment the TVQA dataset with 310.8K bounding boxes, linking depicted objects to visual concepts in questions and answers. We name this augmented version as TVQA+. We then propose Spatio-Temporal Answerer with Grounded Evidence (STAGE), a unified framework that grounds evidence in both spatial and temporal domains to answer questions about videos. Comprehensive experiments and analyses demonstrate the effectiveness of our framework and how the rich annotations in our TVQA+ dataset can contribute to the question answering task. Moreover, by performing this joint task, our model is able to produce insightful and interpretable spatio-temporal attention visualizations.",
 }
 
-@article{momeni2023verbs,
+@inproceedings{momeni2023verbs,
   title={Verbs in Action: Improving verb understanding in video-language models},
   author={Momeni, Liliane and Caron, Mathilde and Nagrani, Arsha and Zisserman, Andrew and Schmid, Cordelia},
-  journal={arXiv preprint arXiv:2304.06708},
+  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
+  pages={15579--15591},
   year={2023}
 }
 
@@ -362,13 +363,13 @@
   doi={10.1109/CVPR.2016.90}
 }
 
-@misc{oord2019infonce,
-      title={Representation Learning with Contrastive Predictive Coding}, 
-      author={Aaron van den Oord and Yazhe Li and Oriol Vinyals},
-      year={2019},
-      eprint={1807.03748},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG}
+@article{oord2019infonce,
+  title={Representation Learning with Contrastive Predictive Coding}, 
+  author={Aaron van den Oord and Yazhe Li and Oriol Vinyals},
+  year={2019},
+  eprint={1807.03748},
+  archivePrefix={arXiv},
+  primaryClass={cs.LG}
 }
 
 @inproceedings{bender2020climbing,
@@ -553,7 +554,7 @@
 } 
 
 @misc{liu2020roberta,
-  title={Ro{\{}BERT{\}}a: A Robustly Optimized {\{}BERT{\}} Pretraining Approach},
+  title={Ro{BERT}a: A Robustly Optimized {BERT} Pretraining Approach},
   author={Yinhan Liu and Myle Ott and Naman Goyal and Jingfei Du and Mandar Joshi and Danqi Chen and Omer Levy and Mike Lewis and Luke Zettlemoyer and Veselin Stoyanov},
   year={2020},
   url={https://openreview.net/forum?id=SyxS0T4tvS}
@@ -598,7 +599,7 @@
 }
 
 @misc{gong2021ast,
-  title={AST: Audio Spectrogram Transformer}, 
+  title={{AST}: Audio Spectrogram Transformer}, 
   author={Yuan Gong and Yu-An Chung and James Glass},
   year={2021},
   eprint={2104.01778},
@@ -786,3 +787,89 @@
   month = {October},
   year = {2019}
 } 
+
+@inproceedings{shang2019vidor,
+  title={Annotating Objects and Relations in User-Generated Videos},
+  author={Shang, Xindi and Di, Donglin and Xiao, Junbin and Cao, Yu and Yang, Xun and Chua, Tat-Seng},
+  booktitle={Proceedings of the 2019 on International Conference on Multimedia Retrieval},
+  pages={279--287},
+  year={2019},
+  organization={ACM}
+}
+
+
+@article{thomee2016yfcc100m,
+  title={YFCC100M: The New Data in Multimedia Research},
+  author={Thomee, Bart and Shamma, David A and Friedland, Gerald and Elizalde, Benjamin and Ni, Karl and Poland, Douglas and Borth, Damian and Li, Li-Jia},
+  journal={Communications of the ACM},
+  volume={59},
+  number={2},
+  pages={64--73},
+  year={2016},
+  publisher={ACM New York, NY, USA}
+}
+
+@InProceedings{johnson2017clevr,
+  author = {Johnson, Justin and Hariharan, Bharath and van der Maaten, Laurens and Fei-Fei, Li and Lawrence Zitnick, C. and Girshick, Ross},
+  title = {CLEVR: A Diagnostic Dataset for Compositional Language and Elementary Visual Reasoning},
+  booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  month = {July},
+  year = {2017}
+} 
+
+@INPROCEEDINGS{goyal2017vqa,
+  author={Goyal, Yash and Khot, Tejas and Summers-Stay, Douglas and Batra, Dhruv and Parikh, Devi},
+  booktitle={2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}, 
+  title={Making the V in VQA Matter: Elevating the Role of Image Understanding in Visual Question Answering}, 
+  year={2017},
+  volume={},
+  number={},
+  pages={6325-6334},
+  doi={10.1109/CVPR.2017.670}
+}
+
+@inproceedings{lei2023revealing,
+  title = "Revealing Single Frame Bias for Video-and-Language Learning",
+  author = "Lei, Jie  and
+    Berg, Tamara  and
+    Bansal, Mohit",
+  editor = "Rogers, Anna  and
+    Boyd-Graber, Jordan  and
+    Okazaki, Naoaki",
+  booktitle = "Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+  month = jul,
+  year = "2023",
+  address = "Toronto, Canada",
+  publisher = "Association for Computational Linguistics",
+  url = "https://aclanthology.org/2023.acl-long.29",
+  doi = "10.18653/v1/2023.acl-long.29",
+  pages = "487--507",
+  abstract = "Training an effective video-and-language model intuitively requires multiple frames as model inputs. However, it is unclear whether using multiple frames is beneficial to downstream tasks, and if yes, whether the performance gain is worth the drastically-increased computation and memory costs resulting from using more frames. In this work, we explore single-frame models for video-and-language learning. On a diverse set of video-and-language tasks (including text-to-video retrieval and video question answering), we show the surprising result that, with large-scale pre-training and a proper frame ensemble strategy at inference time, a single-frame trained model that does not consider temporal information can achieve better performance than existing methods that use multiple frames for training. This result reveals the existence of a strong {``}static appearance bias{''} in popular video-and-language datasets. Therefore, to allow for a more comprehensive evaluation of video-and-language models, we propose two new retrieval tasks based on existing fine-grained action recognition datasets that encourage temporal modeling. Our code is available at \url{https://github.com/jayleicn/singularity}.",
+}
+
+@InProceedings{zhai2022scalingvit,
+  author    = {Zhai, Xiaohua and Kolesnikov, Alexander and Houlsby, Neil and Beyer, Lucas},
+  title     = {Scaling Vision Transformers},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  month     = {June},
+  year      = {2022},
+  pages     = {12104-12113}
+}
+
+@article{yu2022coca,
+  title	= {CoCa: Contrastive Captioners are Image-Text Foundation Models},
+  author	= {Jiahui Yu and Zirui Wang and Vijay Vasudevan and Legg Yeung and Mojtaba Seyedhosseini and Yonghui Wu},
+  year	= {2022},
+  URL	= {https://arxiv.org/abs/2205.01917},
+  journal	= {Transactions on Machine Learning Research},
+  volume	= {Aug 2022}
+}
+
+@inproceedings{hoffmann2022chinchilla,
+  title={An empirical analysis of compute-optimal large language model training},
+  author={Jordan Hoffmann and Sebastian Borgeaud and Arthur Mensch and Elena Buchatskaya and Trevor Cai and Eliza Rutherford and Diego de las Casas and Lisa Anne Hendricks and Johannes Welbl and Aidan Clark and Tom Hennigan and Eric Noland and Katherine Millican and George van den Driessche and Bogdan Damoc and Aurelia Guy and Simon Osindero and Karen Simonyan and Erich Elsen and Oriol Vinyals and Jack William Rae and Laurent Sifre},
+  booktitle={Advances in Neural Information Processing Systems},
+  editor={Alice H. Oh and Alekh Agarwal and Danielle Belgrave and Kyunghyun Cho},
+  year={2022},
+  url={https://openreview.net/forum?id=iBBcRUlOAPR}
+}
