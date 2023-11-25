@@ -113,3 +113,16 @@
         \bottomrule
     \end{tabular} 
 \end{table} 
+
+\section{Comparison to Test of Time}
+\label{sec:tactcompare}
+
+Different base model. They use VideoCLIP~\citep{xu2021videoclip}, which performs well,
+but other models do not perform so well, e.g. Frozen~\citep{bain2021frozen}, 
+VindLU~\citep{cheng2023vindlu}, CLIP4CLIP~\citep{luo2022clip4clip}. They hypothesise
+that it may be because of number of frames input to the model. We use Merlot Reserve,
+which has 8 frames compared to VideoCLIP's 32. Poor results on this would indicate
+more frames is better for this task.
+
+Real-world data. We use full clips rather than stitched together. We use wider range
+of temporal relations (not just before/after).

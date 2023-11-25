@@ -415,7 +415,7 @@ pairs do not produce better results on video tasks.
 
 \citet{bain2021frozen} learn a separate visual encoder for images and videos,
 and a text encoder for captions for video retrieval. Visual features are used
-as input to a space-time transformer encoder, which, when projected into a
+as input to a space-time Transformer encoder, which, when projected into a
 common video-text space, is contrastively compared to the encoded text
 features. The authors use curriculum learning to learn the temporal information
 of videos by increasing the number of frames provided to the model during
@@ -427,10 +427,12 @@ more frames to start with.
 \cite{xu2021videoclip} train a video understanding model using a contrastive
 objective with loosely temporally aligned videos and text transcriptions. The
 authors note that strict alignment between transcript and video clips can
-result in low relevance pairings. In the case of an instructional video, the
-domain of the pretraining dataset used~\citep{miech2019howto100m}, a sentence
-such as ``I am going to show you how to cook fried rice'' may not be exactly
-aligned with the visual semantic content relating to the sentence. The authors
+result in low relevance pairings. 
+%In the case of an instructional video, the
+%domain of the pretraining dataset used~\citep{miech2019howto100m}, a sentence
+%such as ``I am going to show you how to cook fried rice'' may not be exactly
+%aligned with the visual semantic content relating to the sentence. 
+The authors
 empirically find that loosening the constraint between video and text clip
 timestamps to have loosely overlapping pairs provides a better association
 between video and text pairs. The authors also create batches based on

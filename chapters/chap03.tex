@@ -47,22 +47,37 @@ With respect to temporal reasoning, of particular interest to us are the
 sequence questions. These are questions which evaluate the temporal reasoning
 of systems when facing consecutive actions in dynamic situations, and ask about
 relationships between people and objects through the actions they perform in a
-situation. The best baseline model achieves an average accuracy of 36.7\%
-across all question types. In their baseline results, the authors note that
-visual perception has a significant impact on situated reasoning. Existing
-vision models struggle to reason well in real-world situations, and models
-struggle more to identify relationships between objects than objects
-themselves. It is therefore the task of an improved video and language model to
-better realise these relationships.
+situation. In the example shown in \cref{fig:star}, given the sequence question
+``What object did the person take after the person put down the bottle?'' and
+four multiple choice options, a model must predict the correct answer, ``The
+book''.
+
+The best baseline model achieves an average accuracy of 36.7\% across all
+question types. In their baseline results, the authors note that visual
+perception has a significant impact on situated reasoning. Existing vision
+models struggle to reason well in real-world situations, and models struggle
+more to identify relationships between objects than objects themselves. It is
+therefore the task of an improved video and language model to better realise
+these relationships. The authors note that the dataset requires multimodal
+modeling and cannot be solved by a language-only model, with BERT achieving an
+average of 31.5\% accuracy. The relatively low scores with a chance level of
+25\% (based on four multiple choice questions) indicates that there is a lot of
+room for models to improve on this benchmark.
 
 \section{NExT-QA}
-
+\label{sec:nextqa}
 %Description. Explanation of temporal questioning. Used for evaluation in different domain
 NExT-QA~\citep{xiao2021nextqa} is another video question answering dataset with
 a focus on a wider range of temporal actions. Where STAR asks questions that
 test only before/after temporal relations, questions in NExT-QA challenge the
 model to reason about causal actions as well as temporal relations such as
-`when` (\cref{fig:nextqa}).
+`when' (\cref{fig:nextqa}). Videos are sourced from
+YFCC-100M~\citep{thomee2016yfcc100m}, which contains diverse videos portraying
+real-life actions and events from Flickr. Charades videos, mainly filmed inside
+and depicting one person doing a single activity, are limited in their domain.
+To test the generalisability of our approach to different domains, YFCC-100M
+videos provide a greater variety of scenes and actors in the dataset, alongside
+the greater range of temporal relations in NExT-QA questions.
 
 \begin{figure}[tp]
 	\centering
@@ -73,40 +88,50 @@ model to reason about causal actions as well as temporal relations such as
 \end{figure}
 
 \section{Merlot Reserve}
+\label{sec:mreserve}
 
-Merlot Reserve~\citep{zellers2022mreserve} is a pre-trained video language model
-which uses a contrastive objective that learns from aligned audio, subtitles
-and video frames. The authors collect a diverse dataset of 1 billion frames
-from YouTube videos. Videos are filtered to be high quality, favouring
+Merlot Reserve~\citep{zellers2022mreserve} is a pre-trained video language
+model which uses a contrastive objective that learns from aligned audio,
+subtitles and video frames. The authors collect a diverse dataset of 1 billion
+frames from YouTube videos. Videos are filtered to be high quality, favouring
 instructional videos so that there would be a visual grounding to the subtitles
-and audio. The architecture consists of independent encodings of each modality,
-via a Vision Transformer~\citep{dosovitskiy2021vit}, an Audio Spectrogram
+and audio. Subtitles include timing information for each utterance, and so it
+is possible to align segments of video, text, and audio to short timespans for
+all videos, with some later modifications to improve imperfect alignment. The
+architecture consists of independent encodings of each modality, via a Vision
+Transformer~\citep{dosovitskiy2021vit}, an Audio Spectrogram
 Transformer~\citep{gong2021ast}, and a Transformer span encoder, which computes
-targets from an embedding of a candidate text span
-(\cref{fig:mreservearch}). This is then fed into a joint Transformer encoder
-for all modalities and timesteps.
+targets from an embedding of a candidate text span (\cref{fig:mreservearch}).
+This is then fed into a joint Transformer encoder for all modalities and
+timesteps.
 
 The specific pre-training objective is called contrastive span training
-(\cref{fig:contrastivespan}). For each frame aligned with an image, text,
-and audio encoding, a region of text and audio is masked out. The model must
+(\cref{fig:contrastivespan}). For each frame aligned with an image, text, and
+audio encoding, a region of text and audio is masked out. The model must
 maximise its similarity only to an independent encoding of the text and audio.
 In pre-training the model learns to predict spans of text and audio in two
 cases: predicting audio where frames and text is provided; and predicting text
-where frames and audio are provided. 
+where frames and audio are provided. The pre-training task learns both
+independent encoders of the three modalities as well as a joint encoder
+Transformer.
 
 \begin{figure}[tp]
 	\centering
 	\begin{subfigure}[b]{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{mreservearch}
-		\caption{Merlot Reserve Architecture}
+		\caption{Merlot Reserve Architecture. Modalities are independently
+		encoded before being jointly encoded to predict masked text and audio
+		spans.}
 		\label{fig:mreservearch}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{0.45\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{contrastivespan}
-		\caption{Contrastive Span Training}
+		\caption{Contrastive Span Training. The model maximises similarity of
+		correct text and audio encodings to a joint encoding masked subsegment,
+		while maximising dissimilarity of in-batch negatives.}
 		\label{fig:contrastivespan}
 	\end{subfigure}
 	\caption{Merlot Reserve Details. Figures taken from~\citet{zellers2022mreserve}}
@@ -121,3 +146,31 @@ Kinetics-600~\citep{carreira2018kinetics600}, for activity understanding.
 Further, zero-shot experiments showed performance competing with those of
 supervised models on a range of video question answering datasets, and even
 slightly exceeding the supervised state of the art on STAR.
+
+\section{VideoCLIP}
+\label{sec:videoclip}
+
+We use VideoCLIP~\citep{xu2021videoclip} as a probing model to test the
+existing temporal reasoning ability of existing \acrlongpl{vidlm}
+in~\cref{chap:probe}. VideoCLIP trains on video-text clip pairs with a
+contrastive objective. It learns fine-grained associations between the
+modalities by using loosely temporally overlapping video and text clips as
+positive pairs, while sampling progressively harder negative pairs from the
+shared embedding space to the batch as training progresses and better
+representations are learned. In the case of an instructional video, the domain
+of the pretraining dataset used~\citep{miech2019howto100m}, a sentence such as
+``I am going to show you how to cook fried rice'' may not be exactly aligned
+with the visual semantic content relating to the sentence. Using loosely
+overlapping video-text pairs can provide more relevant positive pairs for the
+contrastive loss, and in higher quantity, than exactly temporally aligned
+pairs. 
+
+The authors do zero-shot evaluation on downstream tasks including
+text-to-video retrieval and \acrshort{vidqa}, and similarly to Merlot Reserve
+find that zero-shot evaluation outperforms even supervised previous work on
+select datasets. Since \citet{zellers2022mreserve} and \citet{xu2021videoclip} use
+different datasets or splits to measure performance, we report results on
+the MSR-VTT QA dataset, using splits from~\citet{xu2017video}, where the
+model must choose from five candidate answers. Merlot Reserve achieves a
+zero-shot accuracy of 73.34\% compared to 73.51\% for VideoCLIP. So the two
+models are comparable in terms of headline downstream task performance.
