@@ -106,14 +106,14 @@ This is then fed into a joint Transformer encoder for all modalities and
 timesteps.
 
 The specific pre-training objective is called contrastive span training
-(\cref{fig:contrastivespan}). For each frame aligned with an image, text, and
-audio encoding, a region of text and audio is masked out. The model must
-maximise its similarity only to an independent encoding of the text and audio.
-In pre-training the model learns to predict spans of text and audio in two
-cases: predicting audio where frames and text is provided; and predicting text
-where frames and audio are provided. The pre-training task learns both
-independent encoders of the three modalities as well as a joint encoder
-Transformer.
+(\cref{fig:contrastivespan}). For each segment consisting of an aligned image,
+text, and audio encoding, a region of text and/or audio is masked out with 25\%
+chance. The model must maximise its similarity only to an independent encoding
+of the text and audio. In pre-training the model learns to predict spans of
+text and audio in two cases: predicting audio where frames and text is
+provided; and predicting text where frames and audio are provided. The
+pre-training task learns both independent encoders of the three modalities as
+well as a joint encoder Transformer.
 
 \begin{figure}[tp]
 	\centering
@@ -173,4 +173,5 @@ different datasets or splits to measure performance, we report results on
 the MSR-VTT QA dataset, using splits from~\citet{xu2017video}, where the
 model must choose from five candidate answers. Merlot Reserve achieves a
 zero-shot accuracy of 73.34\% compared to 73.51\% for VideoCLIP. So the two
-models are comparable in terms of headline downstream task performance.
+models are comparable in terms of headline downstream task performance on
+\acrlong{vidqa}.

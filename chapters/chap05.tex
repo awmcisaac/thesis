@@ -2,83 +2,161 @@
 \chapter{Experiment Setup}
 \label{chap:setup}
 
-We continue training the Merlot Reserve model on videos from the Charades
-dataset. We call this process post-pre-training, rather than finetuning, since
-the objective function is the same as in the pre-training stage, but we train
-on a smaller dataset that is designed to improve the temporal reasoning of the
-Merlot Reserve model before being evaluated on downstream tasks. This chapter
-explains the creation process of this small finetuning dataset, as well as the
-post-pre-training process.
+We continue training the Merlot Reserve~\citep{zellers2022mreserve} model on
+videos from the Charades dataset~\citep{sigurdsson2016charades}. We call this
+process post-pretraining, rather than finetuning, since the objective function
+is very similar to the pre-training stage, but we train on a smaller dataset
+that is designed to improve the temporal reasoning of the Merlot Reserve model
+before being evaluated on downstream tasks. This chapter explains the creation
+process of this new dataset, as well as the post-pretraining process.
 
 \section{Dataset Creation}
 \label{sec:data}
 
+We use videos from Charades to create our new dataset. Since one of our
+evaluation benchmarks, STAR~\citep{wu2021star} uses the same dataset as its
+video source, we filter video ids that appear in the validation and test sets
+of STAR to avoid contamination of the evaluation data. We further filter based
+on videos that contain at least 2 actions. This provides 7204 videos, annotated
+with actions and their timespans.
 
-For each video, we create new relation pairs based on annotated actions. Each
-relation is based on Allen's Interval Algebra~\citep{allen1983interval}, shown
-in Table \ref{tab:allen_interval}. 
+For each video, we create relation based on annotated actions. Each relation is
+based on Allen's Interval Algebra~\citep{allen1983interval}, shown in Table
+\ref{tab:allen_interval}. The dataset is specifically designed to provide
+annotations for Merlot Reserve. That is, we create aligned segments of frames,
+text, and audio per instance. Using actions and timestamps allows for a close
+alignment between frames and annotation, which would not be possible if we were
+to use whole video descriptions. Following Merlot Reserve, we use 8 segments
+per instance.
 
 \begin{table}[tp]
 	\centering
 	\caption{The Thirteen Possible Relationships. All relation types except for
-		\textit{equal} have a corresponding inverse relation type. Modified
-		from~\citet{allen1983interval}}
+		\textit{equal} have a corresponding inverse relation type, which is
+		used instead 50\% of the time. To create segments, three frames are
+		selected based on the timespans of $X$ and $Y$. m($\cdot$), s($\cdot$),
+		e($\cdot$), t($\cdot$) indicate the mid, start, end and one-third points of
+	a timespan, respectively. Modified from~\citet{allen1983interval}.}
 	\label{tab:allen_interval}
-	\begin{tabular}{ll}
-	Relation & Pictoral Example \\
-	\hline
-	\texttt{X} \textit{before} \texttt{Y} & \texttt{XXX YYY} \\
-	\texttt{X} \textit{equal} \texttt{Y} & \texttt{XXX} \\
-					   & \texttt{YYY} \\
-	\texttt{X} \textit{meets} \texttt{Y} & \texttt{XXXYYY} \\
-	\texttt{X} \textit{overlaps} \texttt{Y} & \texttt{XXX} \\
-						& \texttt{ YYY} \\
-	\texttt{X} \textit{during} \texttt{Y} & \texttt{ XXX} \\
-						& \texttt{YYYYYY} \\
-	\texttt{X} \textit{starts} \texttt{Y} & \texttt{XXX} \\
-						& \texttt{YYYYY} \\
-	\texttt{X} \textit{finishes} \texttt{Y} & \texttt{\space\space XXX} \\
-							& \texttt{YYYYY} \\
+	\begin{tabular}{llc}
+	\toprule
+	Relation & Example & Frames Selected\\
+	\midrule
+	$X$ \textit{before} $Y$ & \texttt{XXX\space\space YYY} & [m($X$)~;~m(e($X$):s($Y$))~;~m($Y$)] \\
+	$X$ \textit{meets} $Y$ & \texttt{XXXYYY} & [m($X$)~;~m(e($X$):s($Y$))~;~m($Y$)] \\
+	$X$ \textit{overlaps} $Y$ & \texttt{XXX} & [t($X$)~;~m(e($X$):s($Y$))~;~2t($Y$)]\\
+											& \texttt{\space YYY} & \\
+	$X$ \textit{starts} $Y$ & \texttt{XXX} & [m($X$)~;~e($X$)~;~2t($Y$)]\\
+										  & \texttt{YYYYY} & \\
+	$X$ \textit{during} $Y$ & \texttt{\space XXX} & [s($Y$)~;~m($X$)~;~e($Y$)]\\
+										  & \texttt{YYYYYY} & \\
+	$X$ \textit{finishes} $Y$ & \texttt{\space\space XXX} & [t($Y$)~;~s($X$)~;~m($X$)] \\
+											& \texttt{YYYYY} & \\
+	$X$ \textit{equals} $Y$ & \texttt{XXX} & [m(s($X$):s($Y$))~;~m(m($X$):m($Y$))~;~m(e($X$):e($Y$))] \\
+										  & \texttt{YYY} & \\
+	\bottomrule
 	\end{tabular}
 \end{table}
 
-\subsection{Aligning Frames}
-\label{ssec:frames}
+\subsection{Creating Segments}
+\label{ssec:create_segs}
 
-For each video we have all relations $(X, Y)$ between pairs of actions $X, Y$.
-We then attempt to include frames related to as many relations as possible,
-with the requirement that relations cannot overlap with one another in time.
-Where there is an overlap, the precedence order of relations is as follows: \textit{meets,
-overlaps, starts, finishes, during, equals, precedes}. %TODO: why?
+For each video, we have relations between pairs of actions $X, Y$.  We create
+instances for each relation, such that one instance contains annotations for a
+relation between exactly two actions. We create up to $\binom{N}{2}$ instances
+per video, where $N$ is the number of actions labeled in each video. An
+instance is made up of the label for action $X$, a temporal expression $\tau$,
+and the label for action $Y$. Each action pair has a timespan $(X_{start},
+X_{end}), (Y_{start}, Y_{end})$ associated with the action. $\tau$ is chosen
+based on these start and end times, according to Allen's Interval Algebra,
+including a threshold of 1 second to define the range of time that constitutes
+the difference between different relation types \footnote{We find that 1 second
+produces a good compromise to balance slight inaccuracies in annotated time
+stamps while selecting the correct relation type}. For example, if action $X$
+has timespan (0.4, 6.7) and action $Y$ has timespan (6.5, 10.0), this would
+create the instance $X$ \textit{meets} $Y$, since the overlap between the end
+of $X$ and the start of $Y$ is less than the threshold, and such a small
+overlap does not constitute creating an instance with the relation type
+\textit{overlaps}.
 
-Frames are selected based on $(X_{start}, X_{end}), (Y_{start}, Y_{end})$ and
-the specific relation type. If a relation requires frames that intersect an
-already selected frame, the relation is discarded. This is to keep a strict
-relationship between actions and time relations. Once all relations have been
-processed, any remaining frames up to 8 (the number of frames used in Merlot
-Reserve) are selected uniformly at the beginning or end, depending on the time
-before and after any relations. %Maybe more detail on exactly what is done here?
+\begin{sloppypar}
+Once the relation type for a pair of actions is identified, we create the
+triple $(X,\tau,Y)$, split into three segments as follows. We split the label
+into three, depending on the relation type, to create a complete annotation
+that aims to match.
 
-Each frame associated with a relation is annotated with the associated actions
-$X$ and $Y$, along with a temporal indicator based on the specific relation
-type. 
+We split the label into three
+\mbox{[$X$[:-1]~;~$X$[-1:]+$\tau$+$Y$[:1]~;~$Y$[1:]]}, where $X[:-1]$ indicates
+slicing up to the last word of action $X$, $[\cdot+\cdot]$ indicates
+concatenation, and $[\cdot~;~\cdot]$ indicates segment boundaries. This
+creates three segment labels roughly equal in length, with the temporal expression
+$\tau$ in the middle segment.
+\end{sloppypar}
 
-%For example, for a 30 second video, one relation may select two frames
-%at 11 and 17 seconds, based on the times of the relation's actions. If a second
-%relation requires frames at 15 and 19 seconds, this relation would be scrapped,
-%since the alignment of the text description to their respective frames becomes
-%impossible.
+We then select frames and audio spectrograms based on timestamps. For the three
+annotated segments, timestamps are chosen based on the relation type and action
+timespans (see \cref{tab:allen_interval}). The other five timestamps are then
+selected uniformly from either side of the annotations such that remaining
+frames span the length of the whole video. Depending on when the actions occur
+in the video, different numbers of timestamps will be taken from before and
+after the annotated segments. Once we have eight timestamps corresponding to
+the eight segments, we select one frame for each timestamp, and create audio
+spectrograms following Merlot Reserve, with 5 second clips surrounding the
+timestamp. If this causes an overlap with the timespan of another spectrogram,
+the overlap is silenced, so as not to cause any information leakage that may
+otherwise occur when predicting masked segments.
 
 \subsection{Positive Labels}
 \label{ssec:pos_labels}
 
-Positive labels are created depending on the relation type, and consist of two
-actions $X$ and $Y$, and temporal markers indicating the relation between the
-two actions. The labels are split across multiple frames as appropriate
-depending on the relation type. For example, a \textit{finishes} relation type
-is split across two frames, with the first frame being $Y$ + \{then, before\},
-and the second $X$ + \{while, at the same time as\} + $Y$. 
-%TODO: probably more detail, maybe a chart here.
+Each segment is then made up of a frame, an audio spectrogram, and an
+annotation.  The annotation may be empty, or may be one of the three segment
+labels we create in~\cref{ssec:create_segs}. Since our temporal relation types
+do not at this stage include inverse relations (we have a relation type before,
+but not after), we map temporal relation types to temporal expressions with
+50\% chance that the annotation is inverted, including inverting the order of
+the actions. For example, if we have the triple (tidying up a blanket, \textit{before},
+tidying something on the floor), this could create the segment labels [tidying
+up a; blanket before tidying; something on the floor], or, if inverted,
+[tidying something on the; floor after tidying; up a blanket]. This creates a
+balance between opposite temporal relation types.
+
+Mappings from temporal relation types to temporal expressions are shown in
+\cref{tab:temp_maps}
+
+\begin{table}[t]
+	\centering
+	\caption{Mappings from temporal relation types to temporal expressions and their inverses. For inverse temporal expressions, the order of actions \texttt{X} and \texttt{Y} is swapped. For \textit{starts} and \textit{finishes} relations, the final segment includes \texttt{Y} or \texttt{X} depending on whether a normal or inverse temporal expression is used, respectively.}
+	\label{tab:temp_maps}
+    \scriptsize
+	\begin{tabular}{llll}
+		\toprule
+		Relation Type & Temporal Expression & Inverse Temporal Expression & Annotation \\
+	\midrule
+		\textit{before} & \texttt{before} & \texttt{after} & \texttt{[X;$\epsilon$;$\tau$+Y]}\\
+			\textit{meets} & \texttt{immediately before} & \texttt{immediately after} & \texttt{[X[:-1];X[-1:]+$\tau$+Y[:1];Y[1:]]}\\
+			\textit{overlaps} & \texttt{overlaps with} & \texttt{is overlapped by} & \texttt{[X[:-1];X[-1:]+$\tau$+Y[:1];Y[1:]]}\\
+			\textit{starts} & \texttt{(at the same time as,} & \texttt{(at the same time as,} & \texttt{[X;$\tau$[0]+Y[:-1];}\\
+							& \texttt{then continues)} & \texttt{then continues)} & \texttt{ Y[-1:]+$\tau$[1]+(Y$\mid$X)]}\\
+			\textit{during} & \texttt{during} & \texttt{interrupted by} & \texttt{[X[:-1];X[-1:]+$\tau$+Y[:1];Y[1:]]}\\
+			\textit{finishes} & \texttt{(before, while)} & \texttt{(while, after)} & \texttt{[Y;$\tau$[0]+X[:-1];}\\
+							  & & & \texttt{ X[-1:]+$\tau$[1]+(X$\mid$Y)]}\\
+			\textit{equals} & \texttt{and} & \texttt{and} & \texttt{[X[:-1];X[-1:]+$\tau$+Y[:1];Y[1:]]}\\
+	\bottomrule
+	\end{tabular}
+\end{table}
+\normalsize
+
+%Positive labels are created depending on the relation type of the instance, and
+%consist of two actions $X$ and $Y$, and a temporal expression indicating the
+%relation type between the two actions. The labels are split across three segments,
+%such that 
+%
+%The labels are split across multiple
+%frames as appropriate depending on the relation type. For example, a
+%\textit{finishes} relation type is split across two frames, with the first
+%frame being $Y$ + \{then, before\}, and the second $X$ + \{while, at the same
+%time as\} + $Y$. 
 
 \subsection{Contrastive Span Objective}
 \label{ssec:contr_span}
@@ -86,14 +164,14 @@ and the second $X$ + \{while, at the same time as\} + $Y$.
 We use a slightly modified contrastive span objective, as
 in~\citet{zellers2022mreserve}. The difference between our implementation and
 the original comes with the masking strategy. We restrict possibly masked spans
-to spans which contain a temporal word. Since we continue training on the
-pretrained Merlot Reserve model, we do not require further training of the
+to segments which contain a temporal word. Since we continue training on the
+pre-trained Merlot Reserve model, we do not require further training of the
 general span objective, but focus explicitly on the learning of temporal
 reasoning between relations. We do this by using additional hard negatives
-focused on temporal words, along with negatives chosen randomly from the batch.
-The hard negatives act as a close match to the positive option in the
-contrastive setup, but are specifically wrong in the temporal dimension. This
-focuses the model on learning how to reason across time.
+focused on temporal words, along with batch negatives. The hard negatives act
+as a close match to the positive option in the contrastive setup, but are
+specifically wrong in the temporal dimension. This focuses the model on
+learning how to reason across time.
 
 \subsection{Creating Negative Spans}
 \label{ssec:neg_labels}
@@ -102,11 +180,13 @@ We create a list of negative spans for each relation type. Negative spans are
 spans that match the corresponding positive span, except for temporal markers
 in the span. The temporal marker is changed to an alternative temporal marker
 that does not reflect the order of events as determined by the relation. For
-example, the relation type \textit{precedes} is mapped to a set of negative
-temporal markers \textit{``after", ``while", ``at the same time as"}. Each
-negative span consists of the positive span with the positive temporal marker
-substituted for a negative temporal marker. These are then fed to the model
-as additional hard negatives for the contrastive span objective.
+example, the relation type \textit{before} is mapped to a set of negative
+temporal relation types \textit{inv\_before, equals, inv\_meets, inv\_overlaps,
+during, inv\_starts, finishes}. Up to 5 temporal expressions are then selected
+from this set, allowing the contrastive objective to learn different gradations
+of temporality. Each negative span is the positive segment with the positive
+temporal marker substituted for a negative temporal marker. These are then fed
+to the model as additional hard negatives for the contrastive span objective.
 
 \begin{figure}[tp]
 	\centering
@@ -116,9 +196,9 @@ as additional hard negatives for the contrastive span objective.
 \end{figure}
 
 
-\section{Merlot Reserve Post-Pre-Training}
+\section{Merlot Reserve Post-Pretraining}
 \label{sec:training}
 
 Using this dataset, we continue training Merlot Reserve with a similar
-pretraining objective as described in the original paper. We emphasise the
-relevant steps here, but see~\citet{zellers2022mreserve} for full details.
+pre-training objective as described in the original paper. We emphasise the
+relevant steps here.

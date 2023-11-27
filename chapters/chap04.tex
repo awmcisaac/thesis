@@ -10,7 +10,7 @@
 In this chapter we probe the existing temporal reasoning abilities of two
 models: Merlot Reserve~\citep{zellers2022mreserve} and
 VideoCLIP~\citep{xu2021videoclip}.  These models are chosen because of their
-use of a contrastive pretraining objective and zero-shot ability to test on
+use of a contrastive pre-training objective and zero-shot ability to test on
 downstream datasets. We describe the required adaptation of STAR to allow for
 zero-shot testing of both models before detailing results of targeted data
 perturbation for temporal features.
@@ -48,11 +48,10 @@ where the task becomes correctly identifying the correct answer to replace the
 masked span denoted by ``\_''. A full conversion from question type to
 statement is given in~\cref{tab:qs_to_stmts}.
 
-Given these statements we present the model with four statements for each
-instance, where each statement has the masked section replaced by a multiple
-choice answer. This is aligned with the first frame, and all other frames have
-no aligned text. The correct answer is the choice which gives the most probable
-statement, as measured by maximum likelihood.
+Given these statements we present the model with the masked statement for each
+instance. This is aligned with the first frame, and all other frames have no
+aligned text. The correct answer is the choice most likely to replace the
+masked token(s).
 
 \begin{landscape}
 \begin{table}[htpb]
@@ -97,7 +96,6 @@ statement, as measured by maximum likelihood.
 \end{landscape}
 \normalsize
 
-
 \section{VideoCLIP Zero-Shot Setup}
 \label{sec:videoclip_zs}
 
@@ -105,30 +103,33 @@ For VideoCLIP, we use a similar approach to the zero-shot video question
 answering approach in~\citet{xu2021videoclip}. That is, we formulate the task
 as a video-text retrieval task, except the candidate answers are associated
 with each video and the answer selected is the one that is most relevant out of
-the four options. We use the same statement templates as above, to again reduce
-the domain shift from the pre-training data. The model was pre-trained on
+the four options. We use the same statement templates as above, with the masked
+section replaced by each of four multiple choice options, to again reduce the
+domain shift from the pre-training data. The model was pre-trained on
 HowTo100M~\citep{miech2019howto100m}, a large-scale dataset of instructional
-videos. We found that using these masked statements produced better results
-than keeping the question-answer format.
+videos. We found that using these statements produced better results than
+keeping the question-answer format. Each candidate answer is ranked according
+to the InfoNCE contrastive loss~\citep{oord2019infonce}.
 
 \section{Zero-Shot Results}
 \label{sec:zs_star}
 
-\Cref{tab:zs_star} shows the reported results on STAR for both models.
+\Cref{tab:zs_star} shows the reported results on STAR for both models. Our
+results on Merlot Reserve differ from the authors' reported results slightly;
+this may be down to different conversions from questions to statements.
+
 
 \begin{table}[tp] 
     \centering 
-    \caption{Results of Merlot Reserve on STAR dataset. Differences explained
-        by different sampling techniques I think, or question-statement
-        conversions. Also random seed may be different. For val, 43.01 mean is
-        weighted by num in each group. I, S, P, F stand for Interaction,
-        Sequence, Prediction, Feasibility respectively.}
+    \caption{Results of models on STAR dataset. For val, 43.01 mean is
+        weighted by num in each group. I, S, P, F stands for Interaction,
+        Sequence, Prediction, and Feasibility.}
     \label{tab:zs_star} 
     \begin{tabular}{lccccc} 
         \toprule
         \multicolumn{1}{c}{}        & \multicolumn{4}{c}{Question Types}                & \multicolumn{1}{c}{} \\
                                       \cmidrule(){2-5}
-                                    & I & S & P & F & Mean \\
+                                    & I           & S        & P          & F           & Mean \\
         \cmidrule(r){1-1}             \cmidrule(){2-5}                                    \cmidrule(l){6-6}
         Merlot Reserve (val)        & 43.12       & 42.33    & 43.27      & 47.14       & 43.01 (43.97) \\
         VideoCLIP (val)             & 39.66       & 42.86    & 48.72      & 50.82       & 42.84 \\
@@ -205,8 +206,8 @@ In addition to probing language understanding of temporal expressions, we test
 how well the two models encode visual features across frames. Following
 \citet{sevilla-lara2021temporal}, who found that performance on action
 classification degraded in humans when presented with out-of-order video
-frames, we randomise the order of frames %(TODO:or features, should clarify
-more) presented to the models, and test on the default created statements.
+frames, we randomise the order of frames %(TODO:or features, should clarify more) 
+presented to the models, and test on the default created statements.
 Concretely, for Merlot Reserve this involves shuffling the order of the 8
 frames presented to the model, and aligning the statement to the new first
 frame. For VideoCLIP we take the 512-d feature vectors computed from every 30
@@ -218,8 +219,8 @@ their frames randomly shuffled. Results are shown in~\cref{tab:shuffle_feats}.
 \begin{table}[tp]
     \centering
     \caption{Shuffle video features (randomly) results on validation set. %(TODO: test set)
-		VideoCLIP either compute feats from video with fully shuffled frames,
-		or shuffle computed feats on time axis (1 per 30 frames)}
+		VideoCLIP either compute feats from shuffled video,
+		or shuffle computed frame features on time axis (1 per 30 frames)}
     \label{tab:shuffle_feats}
     \begin{tabular}{lccccc}
         \toprule
@@ -230,8 +231,8 @@ their frames randomly shuffled. Results are shown in~\cref{tab:shuffle_feats}.
         Merlot Reserve            & 42.08       & 42.58    & 47.28      & 49.2        & 43.28 (45.29) \\
         Original Merlot Reserve   & 43.12       & 42.33    & 43.27      & 47.14       & 43.01 (43.97) \\
         \cmidrule(r){1-1} \cmidrule(){2-5} \cmidrule(l){6-6}
-        VideoCLIP (shuffle frame) & 34.61       & 36.31    & 36.70      & 40.82       & 36.08 \\
-        VideoCLIP (shuffle feats) & 39.99       & 43.06    & 46.47      & 49.59       & 43.39 \\
+        VideoCLIP (shuffle video) & 34.61       & 36.31    & 36.70      & 40.82       & 36.08 \\
+        VideoCLIP (shuffle frame) & 39.99       & 43.06    & 46.47      & 49.59       & 43.39 \\
         Original VideoCLIP        & 39.66       & 42.86    & 48.72      & 50.82       & 42.84 \\
         \bottomrule
     \end{tabular}

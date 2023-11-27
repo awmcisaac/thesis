@@ -67,18 +67,25 @@ non-matching pairs in the joint embedding space.
 
 In this thesis, we design perturbation experiments to look at the temporal
 reasoning abilities of multiple \acrlongpl{vidlm} trained with a contrastive
-objective function. Using questions which require sequential information from
-the STAR dataset~\cite{wu2021star}, a \acrfull{vidqa} dataset which tests
-situated reasoning questions in real-world videos, we find that these models do
-not learn to distinguish between actions occurring before or actions occurring
-after one another.
+objective function. Following work that questions the ability of contrastive
+learning to pay attention to order structure in
+\acrshortpl{vlm}~\citep{yuksekgonul2023when}, we ask a similar question of
+their ability to reason across time. Using questions which require sequential
+information from the STAR dataset~\cite{wu2021star}, a \acrfull{vidqa} dataset
+which tests situated reasoning questions in real-world videos, we find that
+these models do not learn to distinguish between actions occurring before or
+actions occurring after one another.
 
 Following this finding, we propose a method for learning temporal reasoning
 abilities, using targeted hard negatives in the contrastive objective to
-improve the model's understanding of temporal relations. For example, in a
-video that has been annotated ``someone is dressing before taking a cup from
-somewhere``, we create hard negatives that modify the annotation in the
-temporal dimension only (e.g. ``someone is dressing after taking a cup from
+improve the model's understanding of temporal relations. We use videos from the
+Charades dataset~\cite{sigurdsson2016charades}, which has annotated events and
+their corresponding timespans. For example, in a video that has
+the annotations ``someone is dressing'' and ``taking a cup from somewhere'',
+with the first action occurring before the second, we generate the
+temporally-aware annotation ``someone is dressing before taking a cup from
+somewhere''. We then create hard negatives that modify the annotation in the
+temporal dimension only (e.g.  ``someone is dressing after taking a cup from
 somewhere''), which is added to the batch of video-text pairs as a non-matching
 pair. We evaluate our approach on multiple \acrshort{vidqa} datasets to test
 different types of temporal understanding and the generalisability of our

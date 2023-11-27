@@ -2,6 +2,16 @@
 \chapter{Results}
 \label{chap:results}
 
+In this chapter we evaluate the performance of post-pretraining the Merlot
+Reserve model on our proposed dataset from \cref{chap:setup}. We test
+downstream performance on STAR~\citep{wu2021star} and
+NExT-QA~\citep{xiao2021nextqa}, and analyse some of the choices we made in our
+dataset design process. We finish with a comparison
+to~\citep{bagad2023testoftime}.
+
+\section{Results on STAR}
+\label{sec:star_results}
+
 \begin{table}[htpb]
 	\centering
 	\caption{Post-pretraining results on STAR}
@@ -59,6 +69,8 @@
 	\end{tabular}
 \end{table}
 
+\section{NExT-QA Results}
+\label{sec:nextqa_results}
 %NExT-QA results (\cref{tab:nextqa}). Questions are interesting, generally a bit of a drop, but huge loss in performance for counting questions.
 
 \begin{table}[htpb]
@@ -77,7 +89,7 @@
 		%Shuffled Frames		  & 33.5 & 35.7 & 28.9 & 36.0 & 36.9 & 35.0 & 40.0 & 38.9 & 34.6 \\
 		With Questions		  & 35.3 & 34.0 & 29.8 & 31.4 & 30.8 & 15.8 & 34.8 & 25.9 & 32.2 \\
 		\midrule
-		ATP-Hard			  &	28.9 & 27.5 & 29.8 & 25.8 &	17.2 &  	&      &      & 27.5 \\
+		ATP\textsubscript{hard}	&	28.9 & 27.5 & 29.8 & 25.8 &	17.2 &  	&      &      & 27.5 \\
 		%Shuffled Frames		  & 29.7 & 27.7 & 30.0 & 24.7 & 24.1 &      &      &      & 27.6 \\
 		\midrule
 		% Sparse 20000 ATP	  &	23.2 & 25.8 & 26.4 & 21.7 &	10.3 &  	&      &      & 24.3 \\
@@ -87,6 +99,105 @@
 	\end{tabular}
 \end{table}
 
+
+
+\section{Expanding Temporal Relation Types}
+\label{sec:expandtemprel}
+
+We look at the effect of training on multiple relation types based on Allen's
+Interval Algebra (\cref{sec:data}; \citet{allen1983interval}). We compare using
+a subset of the relation types for non-overlapping relations, and their
+inverses. In practice, this means using the \textit{before} and \textit{meets}
+relations, and their inverses. Results are shown in \cref{tab:expandtemprel}.
+We find that using a wider range of relations performs better/worse.
+
+\begin{table}[t]
+	\centering
+	\caption{Comparison of number of temporal relations used.}
+	\label{tab:expandtemprel}
+	\begin{tabular}{lcc}
+		\toprule
+		& STAR (Sequence) & NExT-QA (ATP\textsubscript{hard}) \\
+		\midrule
+		Non-overlapping & TODO & TODO \\
+		All relation types & TODO & TODO \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+We look at qualitative outputs. Compare examples which each version gets wrong.
+Generalisability of the approach with NExT-QA.
+
+\section{Selecting Annotation Method}
+\label{sec:annot_method}
+
+We also explore alternative approaches for creating the segments. Remember from
+\cref{ssec:create_segs} that we split labels across three segments, with the
+form \mbox{[X[:-1]~;~X[-1:]+$\tau$+Y[:1]~;~Y[1:]]}, combining action
+annotations across segment boundaries. We experiment with creating segments
+formed distinctly of the action annotation and temporal expression in different
+segments, i.e. \mbox{[X;$\tau$;Y]}. We find that this significantly degrades
+performance (\cref{tab:annot_method}), and hypothesise that this is due to the
+shorter length of the temporal relation, often just a single token, which
+differs significantly from the length of segments found in pre-training.
+
+\begin{table}[t]
+	\centering
+	\caption{Annotation Method results on STAR}
+	\label{tab:annot_method}
+	\begin{tabular}{lcc}
+		\toprule
+		 & Sequence & All \\
+		\midrule
+		Combination & TODO & TODO \\
+		Only temporal & 34.69 & 33.94 \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+
+%TODO: explain this better
+We further explore using more dense annotations, with multiple relations per
+instance. We attempt to include as many relations as possible, with the
+requirement that relations cannot overlap with one another in time.  Where
+there is an overlap, there is a precedence order of relations: \textit{meets}
+\textgreater~\textit{overlaps} \textgreater~\textit{starts}
+\textgreater~\textit{finishes} \textgreater~\textit{during}
+\textgreater~\textit{equals} \textgreater~\textit{precedes}. This ordering
+prioritises relations that occur closer together, allowing for more relations
+in a single instance.
+
+Frames are selected based on $(X_{start}, X_{end}), (Y_{start}, Y_{end})$ and
+the specific relation type. If a relation requires frames that intersect an
+already selected frame, the relation is discarded. This is to keep a strict
+relationship between actions and time relations. Once all relations have been
+processed, any remaining frames up to 8 (the number of frames used in Merlot
+Reserve) are selected uniformly at the beginning or end, depending on the time
+before and after any relations. %Maybe more detail on exactly what is done here?
+
+Each frame associated with a relation is annotated with the associated actions
+$X$ and $Y$, along with a temporal indicator based on the specific relation
+type.
+
+For example, for a 30 second video, one relation may select two frames
+at 11 and 17 seconds, based on the times of the relation's actions. If a second
+relation requires frames at 15 and 19 seconds, this relation would be scrapped,
+since the alignment of the text description to their respective frames becomes
+impossible.
+
+
+\section{Comparison to Test of Time}
+\label{sec:tactcompare}
+
+Different base model. They use VideoCLIP~\citep{xu2021videoclip}, which performs well,
+but other models do not perform so well, e.g. Frozen~\citep{bain2021frozen}, 
+VindLU~\citep{cheng2023vindlu}, CLIP4CLIP~\citep{luo2022clip4clip}. They hypothesise
+that it may be because of number of frames input to the model. We use Merlot Reserve,
+which has 8 frames compared to VideoCLIP's 32. Poor results on this would indicate
+more frames is better for this task.
+
+Real-world data. We use full clips rather than stitched together. We use wider range
+of temporal relations (not just before/after).
 
 \begin{table}[tp] 
     \centering 
@@ -113,16 +224,3 @@
         \bottomrule
     \end{tabular} 
 \end{table} 
-
-\section{Comparison to Test of Time}
-\label{sec:tactcompare}
-
-Different base model. They use VideoCLIP~\citep{xu2021videoclip}, which performs well,
-but other models do not perform so well, e.g. Frozen~\citep{bain2021frozen}, 
-VindLU~\citep{cheng2023vindlu}, CLIP4CLIP~\citep{luo2022clip4clip}. They hypothesise
-that it may be because of number of frames input to the model. We use Merlot Reserve,
-which has 8 frames compared to VideoCLIP's 32. Poor results on this would indicate
-more frames is better for this task.
-
-Real-world data. We use full clips rather than stitched together. We use wider range
-of temporal relations (not just before/after).
