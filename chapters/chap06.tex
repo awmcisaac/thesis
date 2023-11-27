@@ -281,7 +281,7 @@ We test freezing different layers of the model, and find little difference
 \section{Comparison to Test of Time}
 \label{sec:tactcompare}
 
-Different base model. They use VideoCLIP~\citep{xu2021videoclip}, which performs well,
+See \cref{tab:tot_star}. Different base model. They use VideoCLIP~\citep{xu2021videoclip}, which performs well,
 but other models do not perform so well, e.g. Frozen~\citep{bain2021frozen}, 
 VindLU~\citep{cheng2023vindlu}, CLIP4CLIP~\citep{luo2022clip4clip}. They hypothesise
 that it may be because of number of frames input to the model. We use Merlot Reserve,
@@ -293,7 +293,7 @@ of temporal relations (not just before/after).
 
 \begin{table}[tp] 
     \centering 
-    \caption{Test of Time results}
+    \caption{Test of Time results on STAR}
     \label{tab:tot_star} 
     \begin{tabular}{lccccc} 
         \toprule
@@ -302,12 +302,11 @@ of temporal relations (not just before/after).
                                 & I           & S        & P          & F           & Mean \\
         \cmidrule(r){1-1}           \cmidrule(){2-5}                                    \cmidrule(l){6-6}
         VideoCLIP (val)         & 39.66       & 42.86    & 48.72      & 50.82       & 42.84 \\
-		Charades TACT (val)		& 45.79		  & 51.28	 & 61.06	  & 60.00		& 50.89 \\
-		Swapped before/after    &			  &	49.30	 &			  &				& \\
-		Masked temporal exprs   &			  & 52.54    &			  &				& \\
-		Shuffled videos			& 37.45		  & 38.29	 & 43.27	  & 44.49		& 38.87 \\
-		Shuffled frames			& 45.25		  & 50.11    & 57.05      & 58.78		& 49.68 \\
-        \cmidrule(r){1-1}           \cmidrule(){2-5}                                    \cmidrule(l){6-6}
+		Swapped before/after	&			  & 41.91	 &			  &				& \\
+		Masked temporal exprs   &			  & 50.11    &			  &				& \\
+		Shuffled videos			& 34.61		  & 36.31	 & 36.70	  & 40.82		& 36.08 \\
+		Shuffled frames			& 39.99		  & 43.06	 & 46.47	  & 49.59		& 43.39 \\
+		\midrule
 		TEMPO TACT (val)		& 39.49		  & 39.88	 & 47.44	  & 46.33		& 40.86 \\
 		Swapped before/after    &			  & 37.73    &			  &				& \\
 		Masked temporal exprs   &			  & 57.53    &			  &				& \\
