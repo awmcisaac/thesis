@@ -6,7 +6,7 @@
 \usepackage{csquotes}
 \usepackage{bm}
 \usepackage{graphicx}
-\graphicspath{{../../figures/}}
+\graphicspath{{../../figures/}{../figures}}
 \usepackage{fancyvrb}
 \usepackage{dcolumn}
 \usepackage{booktabs}
@@ -18,6 +18,8 @@
 \usepackage{appendix}
 \usepackage{nameref}
 \usepackage{lscape}
+\usepackage{caption}
+\usepackage{subcaption}
 
 %\usepackage[9-15]{pagesel}
 % attenzione: la filigrana in prima pagina ha opacità massima con questa opzione attivata
@@ -70,15 +72,19 @@
 \makenomenclature
 
 %da caricare come ultimo pacchetto per evitare problemi
-\usepackage{glossaries}
-\makeglossaries
-\newglossaryentry{set}{name={set},description={a collection of objects}}
-\newglossaryentry{due}{name={second},description={second example}}
-\newglossaryentry{emptyset}{name={\ensuremath{\emptyset}},description={the empty set}}
-\longnewglossaryentry{fishage}{name={Fish Age}}{
-    A common name for the Devonian geologic period spanning from the end of the Silurian Period to the beginning of the Carboniferous Period.
-    
-    This age was known for its remarkable variety of fish species.
-}
-\newglossaryentry{elite}{name={{é}lite},description={select group or class}}
+%\usepackage{glossaries}
+%\makeglossaries
+%\newglossaryentry{set}{name={set},description={a collection of objects}}
+%\newglossaryentry{due}{name={second},description={second example}}
+%\newglossaryentry{emptyset}{name={\ensuremath{\emptyset}},description={the empty set}}
+%\longnewglossaryentry{fishage}{name={Fish Age}}{
+%    A common name for the Devonian geologic period spanning from the end of the Silurian Period to the beginning of the Carboniferous Period.
+%    
+%    This age was known for its remarkable variety of fish species.
+%}
+%\newglossaryentry{elite}{name={{é}lite},description={select group or class}}
 
+\usepackage[acronym,toc]{glossaries} % for list of abbreviations
+\glsdisablehyper
+
+\usepackage{geometry}

@@ -1,2 +1,49 @@
 %! TeX root = ../charles/en/thesis.tex
 \label{chap:conclusion}
+
+In this thesis, we investigated the ability of \acrfullpl{vlm} to reason across
+time. We found that current models, trained with a contrastive learning
+objective, do not use temporal indicators, even for questions that ought to
+require them. When predicting whether one action happens before or after
+another, models perform at chance at best. Following previous work, we
+attempted to instill a sense of temporal reasoning into one specific model,
+Merlot Reserve. We use hard negatives focussed on temporal expressions to make
+models more sensitive to temporal cues, with the expectation that performance
+on tasks that require temporal information would improve, and that models would
+become more robust to misleading temporal information, such as the examples
+shown in \cref{chap:probe}.
+
+We proposed a new dataset based on Charades~\citep{sigurdsson2016charades} for
+the Merlot Reserve model~\citep{zellers2022mreserve}. This dataset added
+focussed hard negatives to segments which include a temporal expression.
+Training on this dataset, with hard negatives included as additions to the
+contrastive loss function, we found that our model improved on zero-shot
+downstream \acrshort{vidqa} tasks, but did not show clear signs of improvement
+in our probing tests. We did find some qualitative suggestions of more model
+uncertainty, however.
+
+%we found that our model was able to perform better
+%at identifying order in video when asked to identify whether one event happens
+%before or after another, although this did not translate to overall better
+%performance on benchmarks. There were also mixed results on other probing
+%tests: swapping the question asked; and shuffling the order of frames provided
+%to the model. 
+
+This may be down to the multiple choice nature of the datasets,
+which often do not provide distractor options that are incorrect in the sense
+of time. Future work may consider this as an added dimension to challenge
+models in when considering multiple-choice video question answering. Open-ended
+\acrshort{vidqa} was not considered here, since the models we evaluate are not
+able to generate text, but it may be an interesting study to compare our
+probing methods with the generated answers given for open-ended
+\acrshort{vidqa} datasets.
+
+Finally, there are technical changes and optimisations that could be made. As
+noted in~\cref{ssec:clip}, contrastive learning often requires large batches to
+work effectively. The largest batch size we were able to train with was 8,
+which is at least an order of magnitude away from batch sizes considered by
+previous work. We also acknowledged that the frame selection process at
+inference time could be improved, and suggested an approach for selecting more
+informative frames from a video. 
+
+

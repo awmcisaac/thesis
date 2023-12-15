@@ -116,16 +116,16 @@ masked language modeling objective on unlabeled data, where the task is to mask
 some percentage of the input tokens at random, and then predict those masked
 tokens.
 
-These representations on their own are not especially useful, but once trained,
-they provide a great starting point for finetuning to a specific task, where
-there may not otherwise be enough data to learn these rich representations of
-language. Downstream tasks can include question answering, natural language
-inference, or sentence classification. Pre-training then finetuning has become
-a common paradigm due to the relative low cost of finetuning once a large model
-has been pre-trained. BERT achieved state of the art on eleven \acrshort{nlp}
-tasks, all of which were finetuned in less than an hour on a TPU. BERT has
-successfully been adapted to vision and language models, as we will discuss in
-\cref{sec:vlm}.
+These representations on their own are not especially useful for common tasks,
+but once trained, they provide a great starting point for finetuning to a
+specific task, where there may not otherwise be enough data to learn these rich
+representations of language. Downstream tasks can include question answering,
+natural language inference, or sentence classification. Pre-training then
+finetuning has become a common paradigm due to the relative low cost of
+finetuning once a large model has been pre-trained. BERT achieved state of the
+art on eleven \acrshort{nlp} tasks, all of which were finetuned in less than an
+hour on a TPU. BERT has successfully been adapted to vision and language
+models, as we will discuss in \cref{sec:vlm}.
 
 
 \section{Image Recognition}
@@ -159,13 +159,13 @@ scalability.
 \subsection{Vision Transformer}
 \label{ssec:vit}
 
-\citet{dosovitskiy2021vit} introduced the Vision Transformer, which takes the
+\citet{dosovitskiy2021vit} introduced the \acrfull{vit}, which takes the
 impressive performance of the Transformer architecture on sequence tasks and
 applies it to image tasks. The authors represent an image as a sequence of
 patches of an image, with an extra patch embedding added alongside the
 positional embedding of the Transformer to maintain the 2-dimensional
 information of an image when projected into a linear sequence. The model is
-shown in \cref{fig:vit}. The Vision Transformer matched or exceeded state of
+shown in \cref{fig:vit}. The \acrshort{vit} matched or exceeded state of
 the art on many image classification datasets, while being trained for
 comparatively less time. As we discuss in \cref{ssec:clip,sec:mreserve}, it has
 been used as the visual encoder for multiple multimodal models due to its
@@ -174,7 +174,7 @@ scaling ability~\citep{zhai2022scalingvit}.
 \begin{figure}[tp]
 	\centering
 	\includegraphics[width=0.8\textwidth]{vit.png}
-	\caption{The Vision Transformer splits an image into patches, embeds them,
+	\caption{The \acrlong{vit} splits an image into patches, embeds them,
 		and feeds them into a Transformer encoder. Classification is learned
 		via an MLP head following the encoder. Figure reproduced
 		from~\citet{dosovitskiy2021vit}}
@@ -208,7 +208,7 @@ the negative captions from the batch $\mathcal{B}$.
 Part of this approach is to use a very large batch, so that there are many
 incorrect pairings to learn from. \citet{radford2021clip} use a batch size of
 32768. The text encoder is a Transformer~\citep{vaswani2017attention}, and
-their best model uses a Vision Transformer~\citep{dosovitskiy2021vit} as the
+their best model uses a \acrlong{vit}~\citep{dosovitskiy2021vit} as the
 image encoder.
 
 The model enables zero-shot transfer to many downstream computer vision
@@ -263,7 +263,7 @@ Other works use novel ways of fusing visual information into the language
 model. \citet{yu2022coca} use cross-attention layers in a text decoder to train
 a captioning loss with pooled features from the image encoder, combined with a
 contrastive loss between image and text features. \citet{li2023blip2}
-bootstraps a \acrshort{vlm} from separate frozen models for vision and for
+bootstrap a \acrshort{vlm} from separate frozen models for vision and for
 language, with a trainable Querying Transformer that extracts a fixed number of
 visual features from the vision encoder and optimises to extract features that
 most align with the text caption associated with the image. The output of the
@@ -338,7 +338,7 @@ require advanced reasoning~\citep{wei2022cot,kojima2022step}.
 
 By providing generative \acrshortpl{llm} with access to image features in its
 prompt, it is possible to leverage pre-trained \acrshortpl{llm} for video
-tasks.  \citet{wang2022vidil} use a vision and language model to label objects,
+tasks. \citet{wang2022vidil} use a vision and language model to label objects,
 events and attributes, as well as captions, for each sampled frame in a video.
 These features are then composed in a template for few-shot learning of video
 tasks.  Temporal relationships between frames are modeled in the template using
@@ -429,7 +429,7 @@ objective with loosely temporally aligned videos and text transcriptions. The
 authors note that strict alignment between transcript and video clips can
 result in low relevance pairings. 
 %In the case of an instructional video, the
-%domain of the pretraining dataset used~\citep{miech2019howto100m}, a sentence
+%domain of the pre-training dataset used~\citep{miech2019howto100m}, a sentence
 %such as ``I am going to show you how to cook fried rice'' may not be exactly
 %aligned with the visual semantic content relating to the sentence. 
 The authors
@@ -462,7 +462,7 @@ STAR~\citep{wu2021star} benchmark. We use this model as the basis for our
 experiments, and discuss the full architecture in~\cref{sec:mreserve}.
 
 % maybe add a table here showing results from all these different models on
-% a couple of tasks. control for pretraining data, ft/zs, 
+% a couple of tasks. control for pre-training data, ft/zs, 
 
 \section{Temporal Reasoning}
 \label{sec:tempreason}
@@ -525,6 +525,29 @@ reasoning ability by estimating event durations to infer implicit end times.
 %\cite{pustejovsky2003timeml}
 
 %Pre-trained LLMs struggle on temporal reasoning, need finetuning.~\citet{vashishtha2020temporal}
+\subsection{In Video and Language}
+\label{ssec:tempvidlm}
+
+Different models have different approaches to modelling temporal awareness for
+videos, even within the contrastive pre-training approach. Merlot
+Reserve~\citep{zellers2022mreserve} relies on an alignment between subtitles,
+audio, and video frames to keep consistent temporal awareness with the
+contrastive span objective, but its architecture lacks a specific module for
+temporal reasoning. Similarly, VideoCLIP~\citep{xu2021videoclip} relies on
+temporally overlapping video-text pairs to train its contrastive objective
+function with an otherwise simple architecture.
+
+In contrast, other models explicitly include temporal modules in the
+architecture, either through learnt temporal positional
+encodings~\citep{alayrac2022flamingo}, 3D linear projections of video
+features~\citep{luo2022clip4clip}, cross-attention between
+frames~\citep{li2023lavender} or combinations
+thereof~\citep{lin2022evl,bain2021frozen}. \citet{lin2022evl} find that the
+effect of temporal information varies greatly depending on the dataset, and
+analysis on Something-Something-V2~\citep{goyal2017something}, which relies
+more heavily on temporal information, shows that including a single temporal
+module improves accuracy by over 10\%, while combining sources of temporal
+information provides marginal extra performance gain.
 
 %\noindent\textbf{Probing video datasets.}\hspace{0.2cm}
 \subsection{Probing Video Datasets}

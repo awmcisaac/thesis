@@ -45,55 +45,71 @@ image-text retrieval
 \Acrfullpl{vidlm} are \acrshortpl{vlm} which are capable of modelling video.
 This provides the additional challenge of modelling long sequences of frames,
 and reasoning temporally across these images. Models must be able to recognise
-how a scene changes over time with respect to not just objects and relations
-between them, but to model the causal link between actions and events. For
-tasks such as video question answering, where a model is given a video and a
-question, and must pick the correct answer out of a number of multiple choice
-options, to answer questions such as ``What did the man do after opening the
-door?'', or ``Why was the toddler crying at the end of the video?'', it must be
-able to relate potentially distant events to one another and reason about them.
-Even if a model is able to select the correct option, how do we know that it
-has applied the correct reasoning steps required to make its prediction?
-\citet{lei2023revealing} and \citet{buch2022revisiting} show that models
-trained with just a single frame can match or outperform the state of the art
-on multiple video and language tasks. This suggests that existing evaluation
-datasets have a ``static appearance bias'' without challenging enough questions
-or options that would require event-level understanding to distinguish between
-them, and potentially that pre-training datasets and objectives are not
-incentivised to learn temporal information~\cite{momeni2023verbs}.
-\Acrshortpl{vidlm} are often trained using contrastive learning, where the
-objective is to correctly match video-text pairs to each other, while repelling
-non-matching pairs in the joint embedding space.
+how a scene changes over time not only with respect to objects and relations
+between them, but they must also model the causal link between actions and
+events. For tasks such as video question answering, where a model is given a
+video and a question, and must pick the correct answer out of a number of
+multiple choice options, to answer questions such as ``What did the man do
+after opening the door?'', or ``Why was the toddler crying at the end of the
+video?'', it must be able to relate potentially distant events to one another
+and reason about them.  Even if a model is able to select the correct option,
+how do we know that it has applied the correct reasoning steps required to make
+its prediction?  \citet{lei2023revealing} and \citet{buch2022revisiting} show
+that models trained with just a single frame can match or outperform the state
+of the art on multiple video and language tasks. This suggests that existing
+evaluation datasets have a ``static appearance bias''~\citep{lei2023revealing}
+without challenging enough questions or options that would require event-level
+understanding to distinguish between them, and potentially that pre-training
+datasets and objectives are not incentivised to learn temporal
+information~\cite{momeni2023verbs}. We explore whether current downstream
+datasets are able to show that temporal reasoning has been learned, for
+instances that should require temporal reasoning. \Acrshortpl{vidlm} are often
+trained using contrastive learning, where the objective is to correctly match
+video-text pairs to each other, while repelling non-matching pairs in the joint
+embedding space. 
 
-In this thesis, we design perturbation experiments to look at the temporal
-reasoning abilities of multiple \acrlongpl{vidlm} trained with a contrastive
-objective function. Following work that questions the ability of contrastive
-learning to pay attention to order structure in
+In this thesis, we aim to understand the abilities of \acrshortpl{vidlm} to
+reason across time, and to propose a method for instilling a fine-grained
+temporal reasoning ability in such models. We design perturbation experiments
+to look at the temporal reasoning abilities of multiple \acrlongpl{vidlm}
+trained with a contrastive objective function. Following work that questions
+the ability of contrastive learning to pay attention to order structure in
 \acrshortpl{vlm}~\citep{yuksekgonul2023when}, we ask a similar question of
-their ability to reason across time. Using questions which require sequential
-information from the STAR dataset~\cite{wu2021star}, a \acrfull{vidqa} dataset
-which tests situated reasoning questions in real-world videos, we find that
-these models do not learn to distinguish between actions occurring before or
-actions occurring after one another.
+their ability to reason across time. Can \acrshortpl{vidlm} learn a grounded
+representation of temporal relations, especially ``before'' and ``after''?
+Using questions which require sequential information from the STAR
+dataset~\cite{wu2021star}, a \acrfull{vidqa} dataset which tests situated
+reasoning questions in real-world videos, we find that these models do not
+learn to distinguish between actions occurring before or actions occurring
+after one another.
 
-Following this finding, we propose a method for learning temporal reasoning
-abilities, using targeted hard negatives in the contrastive objective to
-improve the model's understanding of temporal relations. We use videos from the
-Charades dataset~\cite{sigurdsson2016charades}, which has annotated events and
-their corresponding timespans. For example, in a video that has
-the annotations ``someone is dressing'' and ``taking a cup from somewhere'',
-with the first action occurring before the second, we generate the
-temporally-aware annotation ``someone is dressing before taking a cup from
-somewhere''. We then create hard negatives that modify the annotation in the
-temporal dimension only (e.g.  ``someone is dressing after taking a cup from
+Following this finding, we ask how a model can be incentivised to learn to
+encode these grounded representations. We propose a method for learning
+temporal reasoning abilities, using targeted hard negatives in the contrastive
+objective to improve the model's understanding of temporal relations. We use
+videos from the Charades dataset~\cite{sigurdsson2016charades}, which has
+annotated events and their corresponding timespans, to create annotations with
+a temporal relation connecting a pair of actions, and hard negatives which
+modify the annotation in the temporal dimension only. For example, in a video
+that has the action annotations ``someone is dressing'' and ``taking a cup from
+somewhere'', with the first action occurring before the second, we generate the
+temporally-aware label ``someone is dressing before taking a cup from
+somewhere''. We then create hard negatives that modify the label in the
+temporal dimension (e.g. ``someone is dressing \textit{after} taking a cup from
 somewhere''), which is added to the batch of video-text pairs as a non-matching
-pair. We evaluate our approach on multiple \acrshort{vidqa} datasets to test
+pair. 
+
+We evaluate our approach on multiple \acrshort{vidqa} datasets to test
 different types of temporal understanding and the generalisability of our
 approach. We also explore the effect of using a wider range of temporal
-relations than just before and after to model more fine-grained relations using
-relations from Allen's Interval Algebra~\citep{allen1983interval}, defining a
-range of temporal relation types that capture possible relations between
-actions.
+relations than just before and after to model more fine-grained relations. We
+use relations from Allen's Interval Algebra~\citep{allen1983interval}, a
+calculus for reasoning about temporal intervals, which defines a range of
+temporal relation types that capture possible relations between actions.  We
+find that using more fine-grained relations improves performance compared to
+both using just before and after, and on downstream tasks, although we find
+limited evidence that our models become more robust to temporal reasoning
+probing tests.
 
 The rest of this thesis is organised as follows:
 
@@ -104,10 +120,10 @@ The rest of this thesis is organised as follows:
 		and one key downstream task, \acrlong{vqa}. We finish the chapter with
 		a broad overview of video language models and an overview of the
 		temporal reasoning literature in video and in language.
-	\item \Cref{chap:rel} explores related work on video language models,
+	\item \Cref{chap:rel} explores related work on \acrlongpl{vidlm},
 		with a particular focus on work that explores the impact of contrastive
-		pre-training. We also look at other approaches for instilling temporal
-		reasoning in these models.
+		pre-training. We highlight previous work that has explored
+		temporal reasoning in \acrlongpl{vidlm}.
 	\item In \cref{chap:dataset} we look at the main datasets used, STAR and
 		NExT-QA, as well as the particular pre-trained models that we work on.
 	\item In \cref{chap:probe} we test the current temporal reasoning abilities
@@ -117,8 +133,12 @@ The rest of this thesis is organised as follows:
 		to generating additional hard negatives focussing on temporal words for
 		contrastive training.
 	\item \cref{chap:results} shows performance of our model on STAR and NExT-QA.
-	\item \cref{chap:discussion} discusses the use of contrastive
-		pre-training methods in video and language models, and how our method
-		affects performance of temporal reasoning systems.
-	\item Finally, the \nameref{chap:conclusion} summarises our findings.
+		We evaluate different design decisions in our dataset, and compare our
+		approach to related work.
+%	\item \cref{chap:discussion} discusses the use of contrastive
+%		pre-training methods in video and language models, and how our method
+%		affects performance of temporal reasoning systems.
+	\item Finally, the \nameref{chap:conclusion} summarises our findings and
+		discusses the use of contrastive pre-training methods in
+		\acrlongpl{vidlm} for temporal reasoning.
 \end{itemize}

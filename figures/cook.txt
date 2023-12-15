@@ -1,0 +1,4 @@
+mmpos: ['','','someone is cooking something','immediately before watching/looking','outside of a window','','','']
+
+neg: ['','','someone is cooking something','after watching/looking','outside of a window','','','']
+neg: ['','','someone is cooking something','while watching/looking','outside of a window','','','']

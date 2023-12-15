@@ -1,21 +1,24 @@
 
-\Universita{University of Trento}
-\Dipartimento{Center for Mind/Brain Sciences}
+%\Universita{University of Trento}
+%\Dipartimento{Center for Mind/Brain Sciences}
 \CorsoDiLaurea{Master’s Degree in Cognitive Science}
-\AnnoAccademico{Academic Year 2022--2023}
-\Titolo{Temporal Reasoning in Vision and Language Models}
+\AnnoAccademico{Academic Year\\2022--2023}
+\Titolo{TEMPORAL REASONING IN VISION AND LANGUAGE MODELS}
 \Relatore{Prof. Raffaella \textsc{Bernardi}}
 \RelatoreLabel{Supervisor}
-\CandidatoLabel{Graduate Student}
+\Correlatore{Prof. Paolo \textsc{Rota}}
+\CorrelatoreLabel{Co-Supervisor}
+\CandidatoLabel{Student:}
 
 \Candidato{Andrew \textsc{McIsaac}} 
-\Matricola{238571}
-\DataEsame{\today}
-\Logo{Impaginazione/logo_rosso.png}
-\LogoWidth{4.5cm} %optional, default: 3cm
+%\Matricola{236671}
+%\DataEsame{\today}
+%\Logo{Impaginazione/logo_rosso.png}
+\Logo{trento_header}
+\LogoWidth{10cm} %optional, default: 3cm
 \LogoPosition{top}
 \LogoSfondo{Impaginazione/logo_bn.png}
-\opacitaSfondo{0.05}
+\opacitaSfondo{0.00}
 
 \begin{titlepage}
     \newgeometry{left=3cm, right=3cm, bottom=2cm, top =3cm} 
@@ -26,27 +29,58 @@
 
 \frontmatter
 % dedica
-~ \newpage
-\null\vspace{\stretch{1}}
-\begin{flushright}
-    \textit{Dedica}
-\end{flushright}
-\vspace{\stretch{2}}\null
+%~ \newpage
+%\null\vspace{\stretch{1}}
+%\begin{flushright}
+%    \textit{Dedica}
+%\end{flushright}
+%\vspace{\stretch{2}}\null
 
 %ringraziamenti
 \chapter*{Acknowledgments}
 
+Thank you first, to my supervisors, Prof. Raffaella Bernardi and Prof. Paolo
+Rota, for introducing this engaging topic to me, and helping to guide me
+through this thesis-writing process, and for providing me access to compute
+clusters, without which I would not have been able to do this work. Thank you
+also to my co-supervisor at Charles University, Doc. RNDR. Ondřej Bojar, and to
+all my professors who have taught me throughout this program. I would also like
+to thank the Erasmus Mundus Language and Communication Technologies program for
+generously providing me with a scholarship during my Master's, and for giving
+me the opportunity to travel and spend an extended period of time in two
+wonderful countries. 
+
+But the places wouldn't be anything without the people you meet, so thank you
+to the friends I have made along the way, for your support and kindness
+throughout. Finally, thank you to my family, who have supported me from afar
+over the last two years.
+
+
 \begin{abstract}
-    Qui va l'abstract
+	Are vision and language models able to reason across time? We evaluate the
+	performance of vision and language models (VLMs) on the task of video
+	question answering, with a particular focus on their temporal reasoning
+	abilities. We probe the STAR video QA dataset on two VLMs with data
+	perturbation methods of text and video inputs, and find that models are
+	generally unable to identify the meaning of before and after in sequential
+	questions. We then ask how a model can effectively learn these temporal
+	relations, and design a new dataset drawn from videos and annotations from
+	the Charades dataset. We create annotations that include targeted hard
+	negative examples for the contrastive loss objective of one VLM, Merlot
+	Reserve, such that the model must adapt to learn temporal relations. We
+	further explore how to model fine-grained temporal relationships, and
+	evaluate the benefits. We find that our approach shows promising signs of
+	improvement on tasks that require temporal understanding, although it gains
+	little sensitivity to temporal relations when probed.
 \end{abstract}
 
 \tableofcontents
 
-\printglossaries
-\addcontentsline{toc}{chapter}{Glossary}
+%\printglossaries
+%\addcontentsline{toc}{chapter}{Glossary}
 
-\printnomenclature
-\addcontentsline{toc}{chapter}{Nomenclature list}
+%\printnomenclature
+%\addcontentsline{toc}{chapter}{Nomenclature list}
 
 \mainmatter
 \chapter*{Introduction}

@@ -13,7 +13,7 @@
 
 % Flags, counters
 \def\@relatorilist{}
-%\def\@correlatorilist{}
+\def\@correlatorilist{}
 
 % logo positioning options
 \def\@topPosition{top}
@@ -51,7 +51,7 @@
 \newcommand{\printcandidateblock}[1]{%
         \hfill
         \@Candidato\\
-        \hbox{}\hfill{\scshape\@Matricola}
+%        \hbox{}\hfill{\scshape\@Matricola}
 }
 
 \newcommand{\ifstrequals}[4]{
@@ -74,7 +74,7 @@
 \newcommand{\AnnoAccademico}[1]{\newcommand{\@AnnoAccademico}{#1}}
 \newcommand{\Logo}[1]{\newcommand{\@Logo}{#1}}
 \newcommand{\Relatore}[1]{\listadd{\@relatorilist}{#1}}
-%\newcommand{\Correlatore}[1]{\listadd{\@correlatorilist}{#1}}
+\newcommand{\Correlatore}[1]{\listadd{\@correlatorilist}{#1}}
 
 \newcommand{\@Candidato}{}
 \newcommand{\Candidato}[1]{\renewcommand{\@Candidato}{#1}}
@@ -163,16 +163,16 @@
             \fi
 
             \ifdefined\@CorsoDiLaurea
-                {\Large\textsc{\@CorsoDiLaurea}}
+				{\vspace{2cm}\Large\textsc{\@CorsoDiLaurea}}
             \fi
 
             \ifdefined\@Materia
                 {\large\textsc{\@Materia}}
             \fi
             
-            \ifdefined\@AnnoAccademico
-                \sep
-                {\large \textsc{\@AnnoAccademico}}\fi
+%            \ifdefined\@AnnoAccademico
+%                \sep
+%                {\large \textsc{\@AnnoAccademico}}\fi
 
             \vfill
             \ifdefined\@FrontespizioAlt \else
@@ -196,9 +196,9 @@
                 \textbf{\@RelatoreLabel}\par
                 \myprintlist{\@relatorilist} 
 
-                %\vspace{\@relandcorrelsep}
-                %\textbf{\@CorrelatoreLabel}\par
-                %\myprintlist{\@correlatorilist}
+                \vspace{\@relandcorrelsep}
+                \textbf{\@CorrelatoreLabel}\par
+                \myprintlist{\@correlatorilist}
             \end{minipage}\hfill%
             \begin{minipage}[t]{.45\textwidth}
                 \normalsize
@@ -215,6 +215,9 @@
                 {\large\textsc{Final examination date:} \@DataEsame}
                 \rule{\textwidth}{0.5mm}
             \fi
+            \ifdefined\@AnnoAccademico
+%                \sep
+                {\large \textsc{\@AnnoAccademico}}\fi
         \end{center}
     \end{titlepage}
 }

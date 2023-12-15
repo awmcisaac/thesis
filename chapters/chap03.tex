@@ -11,7 +11,6 @@ and achieves state of the art performance. In \cref{chap:setup,chap:results}
 we test how we can modify this model to improve its temporal reasoning ability,
 while keeping strong performance on the STAR dataset. We further use NExT-QA to
 test the generalisability of our model.
-%TODO: Use NexT-QA ATP\textsubscript{hard} subset as well.
 
 \section{STAR}
 \label{sec:star}
@@ -78,6 +77,9 @@ and depicting one person doing a single activity, are limited in their domain.
 To test the generalisability of our approach to different domains, YFCC-100M
 videos provide a greater variety of scenes and actors in the dataset, alongside
 the greater range of temporal relations in NExT-QA questions.
+\citet{buch2022revisiting} introduce a subset of NExT-QA, dubbed
+ATP\textsubscript{hard}, which is NExT-QA questions that are challenging in the
+temporal dimension. We test on this subset as well.
 
 \begin{figure}[tp]
 	\centering
@@ -86,6 +88,7 @@ the greater range of temporal relations in NExT-QA questions.
 		From~\citet{xiao2021nextqa}}
 	\label{fig:nextqa}
 \end{figure}
+
 
 \section{Merlot Reserve}
 \label{sec:mreserve}
@@ -164,6 +167,14 @@ with the visual semantic content relating to the sentence. Using loosely
 overlapping video-text pairs can provide more relevant positive pairs for the
 contrastive loss, and in higher quantity, than exactly temporally aligned
 pairs. 
+
+They extract 512-d video features every 30 frames, using a pre-trained video
+encoder S3D~\citep{xie2018s3d} on HowTo100M~\citep{miech2019howto100m}. S3D is
+a 3D CNN that extracts spatio-temporal features over time. The result is dense
+representations of many frames, which other models such as Merlot Reserve,
+Frozen~\citep{bain2021frozen}, and CLIP4CLIP~\citep{luo2022clip4clip} do not
+have. For a 30 second video, VideoCLIP has visual input from 30 frames,
+compared to up to 12 in other models.
 
 The authors do zero-shot evaluation on downstream tasks including
 text-to-video retrieval and \acrshort{vidqa}, and similarly to Merlot Reserve

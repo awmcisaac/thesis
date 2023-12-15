@@ -59,6 +59,7 @@
 \usepackage{lscape}
 \usepackage[acronym,toc]{glossaries} % for list of abbreviations
 \glsdisablehyper
+\usepackage{geometry}
 
 % Ondrej's macros for commenting
 \usepackage[normalem]{ulem} % sout, uline
@@ -75,7 +76,7 @@
 \def\ThesisAuthor{Andrew McIsaac}
 
 % Year when the thesis is submitted
-\def\YearSubmitted{2023}
+\def\YearSubmitted{2024}
 
 % Name of the department or institute, where the work was officially assigned
 % (according to the Organizational Structure of MFF UK in English,
@@ -98,17 +99,44 @@
 % An optional dedication: you can thank whomever you wish (your supervisor,
 % consultant, a person who lent the software, etc.)
 \def\Dedication{%
-Dedication.
+Thank you first, to my supervisors at the University of Trento, Prof. Raffaella
+Bernardi and Prof. Paolo Rota, for introducing this engaging topic to me, and
+helping to guide me through this thesis-writing process, and for providing me
+access to compute clusters, without which I would not have been able to do this
+work. Thank you also to my co-supervisor at Charles University, Doc. RNDr.
+Ond\v{r}ej Bojar, and to all my professors who have taught me throughout this
+program. I would also like to thank the Erasmus Mundus Language and
+Communication Technologies program for generously providing me with a
+scholarship during my Master's, and for giving me the opportunity to travel and
+spend an extended period of time in two wonderful countries. 
+
+But the places wouldn't be anything without the people you meet, so thank you
+to the friends I have made along the way, for your support and kindness
+throughout. Finally, thank you to my family, who have supported me from afar
+over the last two years.
 }
 
 % Abstract (recommended length around 80-200 words; this is not a copy of your thesis assignment!)
 \def\Abstract{%
-Abstract.
+Are vision and language models able to reason across time? We evaluate the
+performance of vision and language models (VLMs) on the task of video question
+answering, with a particular focus on their temporal reasoning abilities. We
+probe the STAR video QA dataset on two VLMs with data perturbation methods of
+text and video inputs, and find that models are generally unable to identify
+the meaning of before and after in sequential questions. We then ask how a
+model can effectively learn these temporal relations, and design a new dataset
+drawn from videos and annotations from the Charades dataset. We create
+annotations that include targeted hard negative examples for the contrastive
+loss objective of one VLM, Merlot Reserve, such that the model must adapt to
+learn temporal relations. We further explore how to model fine-grained temporal
+relationships, and evaluate the benefits. We find that our approach shows
+promising signs of improvement on tasks that require temporal understanding,
+although it gains little sensitivity to temporal relations when probed.
 }
 
 % 3 to 5 keywords (recommended), each enclosed in curly braces
 \def\Keywords{%
-	{multimodal} {video LM} {temporal reasoning} {contrastive reasoning}
+	{multimodal} {video LM} {temporal reasoning} {contrastive learning}
 }
 
 %% The hyperref package for clickable links in PDF and also for storing
@@ -140,7 +168,7 @@ Abstract.
 \input{../../chapters/chap04}
 \input{../../chapters/chap05}
 \input{../../chapters/chap06}
-\input{../../chapters/chap07}
+%\input{../../chapters/chap07}
 
 \include{epilog}
 
@@ -171,8 +199,8 @@ Abstract.
 %%% source code, data files, interactive charts, etc.). Electronic attachments
 %%% should be uploaded to SIS and optionally also included in the thesis on a~CD/DVD.
 %%% Allowed file formats are specified in provision of the rector no. 72/2017.
-\appendix
-\input{../../chapters/appendixA}
+%\appendix
+%\input{../../chapters/appendixA}
 
 \openright
 \end{document}

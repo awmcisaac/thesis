@@ -5,7 +5,7 @@
 This chapter looks at previous work on probing \acrlongpl{vlm},
 and techniques for improving reasoning in various directions in \acrlong{vlm}s. We use
 and extend the approaches explored to try and improve the temporal reasoning
-abilities of \acrshortpl{vidlm}.
+abilities of \acrlongpl{vidlm}.
 
 %\section{Video Language Models}
 %\label{sec:vidlmb}
@@ -134,8 +134,8 @@ post-pretraining objective.
 They find that this approach improves performance on the time-order probing
 task, with models much more likely to match the correct caption to the stitched
 video clips. On downstream tasks, they find a mixed result. On video retrieval
-tasks, on which claim existing datasets have more of a bias towards spatial
-understanding than temporal reasoning
+tasks, on which they claim existing datasets have more of a bias towards
+spatial understanding than temporal reasoning
 (see~\cref{ssec:adaptvlm};~\citet{buch2022revisiting,lei2023revealing,luo2022clip4clip}),
 the model performs slightly worse in general than without using the TACT
 approach. On \acrlong{vidqa}, with temporally challenging datasets, there are
@@ -150,6 +150,7 @@ identified as requiring temporal information.
 
 In comparison to~\cite{bagad2023testoftime}, we explore different ways of
 probing temporal understanding, use a wider range of temporal relations with
-full videos, and aim to gain stronger relationship between frame and action
-with the contrastive span objective. We fully compare our approaches and
-results in~\cref{sec:tactcompare}.
+full videos, and aim to gain a stronger relationship between frame and action
+with the contrastive span objective. We provide a full comparison of our
+approaches and results in~\cref{sec:tactcompare}. We now go on to describe the
+datasets and models that we use in our approach.
