@@ -246,7 +246,7 @@ grounded representations may be to combine the two modalities of language and
 vision through multimodal embeddings. A key challenge in recent years has been
 to find suitable methods for creating these shared representations.
 
-One approach follows the strong performance of BERT~\cite{devlin2019bert} in
+One approach follows the strong performance of BERT~\citep{devlin2019bert} in
 \acrshort{nlp} tasks. \citet{li2019visualbert} extend BERT to include visual
 features extracted from a \acrshort{cnn} as well as text tokens as input to a
 Transformer encoder, implicitly discovering a joint representation between the
@@ -277,7 +277,7 @@ downstream tasks is \acrlong{vqa}.
 
 \Acrfull{vqa} is the task of answering questions given text and an
 image. There are a range of datasets that test different aspects of image and
-text understanding (e.g.~\cite{johnson2017clevr,hudson2019gqa,antol2015vqa}). A
+text understanding (e.g.~\citet{johnson2017clevr,hudson2019gqa,antol2015vqa}). A
 challenge in creating datasets is to ensure that there are few statistical
 biases or shortcuts in the answer distribution that a model can exploit without
 a true understanding of the scene. For example, models trained on the VQA
@@ -285,7 +285,8 @@ dataset~\citep{antol2015vqa} were found to make predictions based on overly
 strong language priors without considering the associated
 image~\citep{zhang2016yin} (a green banana may trip up a model) and failed to
 show complete question understanding, settling on an answer before receiving
-the full question ~\citep{agrawal2016analyzing}. Questions generally required
+%\XXX{I am not a fan of the tilda (non-breaking space) in front of citations, and here it caused an extra space, see the next line in the source LaTeX code:}
+the full question~\citep{agrawal2016analyzing}. Questions generally required
 little reasoning or compositionality, with many answers achievable solely by
 object recognition~\citep{hudson2019gqa}. The GQA dataset~\citep{hudson2019gqa}
 is one dataset that aims to limit these issues by generating questions with
@@ -342,6 +343,7 @@ tasks. \citet{wang2022vidil} use a vision and language model to label objects,
 events and attributes, as well as captions, for each sampled frame in a video.
 These features are then composed in a template for few-shot learning of video
 tasks.  Temporal relationships between frames are modeled in the template using
+%\XXX{It would have been very very useful here to show an illustration of a video snippet (a sequence of frames) and the corresponding textual representation that is fed to the LLM.}
 textual indicators (`first', `then', `finally'). Crucially, no finetuning of
 language or vision and language models is performed, so high quality
 pre-trained models can be plugged in and changed easily. This process is highly
@@ -349,10 +351,13 @@ dependent on strong visual feature extraction, meaning that key low-level
 features may be lost if the vision models are not strong enough. Concurrent
 work by~\citet{zeng2023socratic} finds that using stronger \acrlongpl{vlm}
 correlates with better performance when combining \acrshortpl{vlm} and language
-models in a zero-shot manner for egocentric perception. The added latency costs
-of having separate models for visual tokenisation, frame captioning, and
-language generation may however make the overall system inadequate for
-practical use.
+models in a zero-shot manner for egocentric perception, where videos are shot from a first-person perspective.
+%\XXX{ecocentric perception intuivitely clear but indefined -- and esp. immediately, I am curious about filtering video datasets so that they are egocentric}
+%\XXX{The following sentence is true, but I don't find it necessary for your level of research -- you are far from applications.}
+%The added latency costs
+%of having separate models for visual tokenisation, frame captioning, and
+%language generation may however make the overall system inadequate for
+%practical use.
 
 \citet{portilloquintero2021clipvidret} use \acrshort{clip} features with an
 aggregation function across frames to adapt to the video domain for retrieval
@@ -424,7 +429,7 @@ retrieval, and that progressively increasing the number of frames (up to 8
 frames) during pre-training can result in better performance than training with
 more frames to start with. 
 
-\cite{xu2021videoclip} train a video understanding model using a contrastive
+\citet{xu2021videoclip} train a video understanding model using a contrastive
 objective with loosely temporally aligned videos and text transcriptions. The
 authors note that strict alignment between transcript and video clips can
 result in low relevance pairings. 
@@ -503,12 +508,16 @@ model's performance on these tasks.
 \subsection{In Language}
 \label{ssec:templang}
 There is a long history of studying temporal expressions in linguistics.
-~\citet{moens1988temporal} claim that \textit{when}-clauses ``establish a
-temporal focus'' between two events, contingent on e.g. a causal link, as in
-the unnatural use of \textit{when} in ``*When my car broke down, the sun set.''
-Any representation looking to model temporal descriptions must therefore, for
-\textit{when}-clauses and similar phenomena, model contingency, rather than
-just temporality.
+~\citet{moens1988temporal} claim that \textit{when}-clauses (e.g. ``When they
+built the 39th Street bridge, they solved most of their traffic problems'') are
+not primarily temporal, but ``establish a temporal focus'' between two events,
+contingent on e.g. a causal link, as in the unnatural use of \textit{when} in
+``*When my car broke down, the sun set.''
+%\XXX{I don't understand the following sentence meaning. More verbose explanation of contingency vs. temporality would be needed.}
+They argue that any representation looking to accurately model temporal
+descriptions must therefore, for \textit{when}-clauses and similar phenomena,
+model contingency, a dependency between events in time, rather than just the
+sequential ordering in time of such events.
 
 \citet{allen1983interval} suggests a model of temporal reasoning based on
 intervals and relations among them. Given two events, the temporal relations
@@ -539,8 +548,9 @@ function with an otherwise simple architecture.
 
 In contrast, other models explicitly include temporal modules in the
 architecture, either through learnt temporal positional
-encodings~\citep{alayrac2022flamingo}, 3D linear projections of video
-features~\citep{luo2022clip4clip}, cross-attention between
+encodings~\citep{alayrac2022flamingo}, 3D linear projections %\XXX{the 3D projections is something very hard for me to imagine what it could be doing; could you include a summary in a half a sentence?}
+of video features with patches to the \acrshort{vit} video encoder a 3D kernel of multiple frames
+, cross-attention between
 frames~\citep{li2023lavender} or combinations
 thereof~\citep{lin2022evl,bain2021frozen}. \citet{lin2022evl} find that the
 effect of temporal information varies greatly depending on the dataset, and

@@ -10,10 +10,10 @@ dataset design process. We finish with a comparison
 to~\citep{bagad2023testoftime}.
 
 \section{Zero-Shot Downstream Results}
-\label{sec:star_results}
+\label{sec:zs_results}
 
-\subsection{STAR}
-\label{sec:star_results}
+\subsection{STAR Results}
+\label{ssec:star_results}
 
 We report zero-shot performance of our model compared to the original Merlot Reserve
 model in \cref{tab:star_ppt}. We find that performance improves slightly for both
@@ -135,7 +135,7 @@ strict template for question types, we use a generative \acrshort{llm} to
 convert from questions to masked statements. We follow the approach in
 \citet{zellers2022mreserve} for generating statements for
 MSRVTT-QA~\citep{xu2016msr-vtt} questions, by providing a prompt for each
-question type. We use Mistral-7B-Instruct~\cite{jiang2023mistral}, an
+question type. We use Mistral-7B-Instruct~\citep{jiang2023mistral}, an
 \acrshort{llm} which has been finetuned to better respond to instructional
 prompts (see~\citet{ouyang2022instructgpt}). For each question, we provide a
 different prompt depending on the question type, which includes an instruction

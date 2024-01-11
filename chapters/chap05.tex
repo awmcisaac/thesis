@@ -44,11 +44,13 @@ Following Merlot Reserve, we use 8 segments per instance.
 \begin{table}[tp]
 	\centering
 	\caption{The Thirteen Possible Relationships. All relation types except for
-		\textit{equal} have a corresponding inverse relation type, which is
-		used instead 50\% of the time. To create segments, three frames are
-		selected based on the timespans of $X$ and $Y$. m($\cdot$), s($\cdot$),
-		e($\cdot$), t($\cdot$) indicate the mid, start, end and one-third points of
-	a timespan, respectively. Modified from~\citet{allen1983interval}.}
+		\textit{equal} have a corresponding inverse relation type, which is used
+		instead 50\% of the time. To create segments, three frames are selected based
+		on the timespans of actions $X$ and $Y$. m($\cdot$), s($\cdot$), e($\cdot$),
+		t($\cdot$) indicate the mid, start, end and one-third points of a timespan,
+		respectively. A timespan is indicated either by the action $X$ or $Y$, or by
+		the interval between timepoints, expressed using a colon (:). Modified
+		from~\citet{allen1983interval}.}
 	\label{tab:allen_interval}
 	\begin{tabular}{llc}
 	\toprule
@@ -56,7 +58,7 @@ Following Merlot Reserve, we use 8 segments per instance.
 	\midrule
 	$X$ \textit{before} $Y$ & \texttt{XXX\space\space YYY} & [m($X$)~;~m(e($X$):s($Y$))~;~m($Y$)] \\
 	$X$ \textit{meets} $Y$ & \texttt{XXXYYY} & [m($X$)~;~m(e($X$):s($Y$))~;~m($Y$)] \\
-	$X$ \textit{overlaps} $Y$ & \texttt{XXX} & [t($X$)~;~m(e($X$):s($Y$))~;~2t($Y$)]\\
+	$X$ \textit{overlaps} $Y$ & \texttt{XXX} & [t($X$)~;~m(s($Y$):e($X$))~;~2t($Y$)]\\
 											& \texttt{\space YYY} & \\
 	$X$ \textit{starts} $Y$ & \texttt{XXX} & [m($X$)~;~e($X$)~;~2t($Y$)]\\
 										  & \texttt{YYYYY} & \\
@@ -82,10 +84,11 @@ $X$, a temporal expression $\tau$, and the label for action $Y$. Each action
 pair has a timespan $(X_{start}, X_{end}), (Y_{start}, Y_{end})$ associated
 with the action. $\tau$ is chosen based on these start and end times, according
 to Allen's Interval Algebra, including a threshold of 1 second to define the
-range of time that constitutes the difference between different relation types
-\footnote{We find that 1 second provides a good compromise balance slight
+range of time that constitutes the difference between different relation types.\footnote{We find that 1 second provides a good compromise balance slight
 inaccuracies in annotated time stamps while selecting the correct relation
-type}. For example, if action $X$ has timespan (0.4, 6.7) and action $Y$ has
+type.} 
+%\XXX{footnote index should appear (without any space) after a punctuation, not before it:}
+For example, if action $X$ has timespan (0.4, 6.7) and action $Y$ has
 timespan (6.5, 10.0), this would create the instance $X$ \textit{meets} $Y$,
 since the overlap between the end of $X$ and the start of $Y$ is less than the
 threshold, and such a small overlap does not constitute creating an instance

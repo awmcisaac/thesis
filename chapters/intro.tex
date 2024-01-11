@@ -60,8 +60,8 @@ of the art on multiple video and language tasks. This suggests that existing
 evaluation datasets have a ``static appearance bias''~\citep{lei2023revealing}
 without challenging enough questions or options that would require event-level
 understanding to distinguish between them, and potentially that pre-training
-datasets and objectives are not incentivised to learn temporal
-information~\cite{momeni2023verbs}. We explore whether current downstream
+datasets and objectives are not incentivised to learn temporal %\XXX{the following should be citep, not cite}
+information~\citep{momeni2023verbs}. We explore whether current downstream
 datasets are able to show that temporal reasoning has been learned, for
 instances that should require temporal reasoning. \Acrshortpl{vidlm} are often
 trained using contrastive learning, where the objective is to correctly match
@@ -77,8 +77,8 @@ the ability of contrastive learning to pay attention to order structure in
 \acrshortpl{vlm}~\citep{yuksekgonul2023when}, we ask a similar question of
 their ability to reason across time. Can \acrshortpl{vidlm} learn a grounded
 representation of temporal relations, especially ``before'' and ``after''?
-Using questions which require sequential information from the STAR
-dataset~\cite{wu2021star}, a \acrfull{vidqa} dataset which tests situated
+Using questions which require sequential information from the STAR %\XXX{the following should be citep, not cite; and similarly in more places; you should check this everywhere}
+dataset~\citep{wu2021star}, a \acrfull{vidqa} dataset which tests situated
 reasoning questions in real-world videos, we find that these models do not
 learn to distinguish between actions occurring before or actions occurring
 after one another.
@@ -87,7 +87,7 @@ Following this finding, we ask how a model can be incentivised to learn to
 encode these grounded representations. We propose a method for learning
 temporal reasoning abilities, using targeted hard negatives in the contrastive
 objective to improve the model's understanding of temporal relations. We use
-videos from the Charades dataset~\cite{sigurdsson2016charades}, which has
+videos from the Charades dataset~\citep{sigurdsson2016charades}, which has
 annotated events and their corresponding timespans, to create annotations with
 a temporal relation connecting a pair of actions, and hard negatives which
 modify the annotation in the temporal dimension only. For example, in a video

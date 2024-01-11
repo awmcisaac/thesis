@@ -54,7 +54,8 @@ carefully constructed caption alternatives, order information is not required
 to solve the objective. An incentive, in the form of additional hard negatives
 in both alternative images and generated targeted captions, is therefore
 proposed~(\cref{fig:bow_hard_negs}), which improves performance on the testing
-benchmarks for attribution (62\% to 71\%), relation (63\% to 81\%), and order
+benchmarks for attribution (%\XXX{unclear if it is by 62 to 71 percent, or from 62 to 71 percent}
+from 62\% to 71\%), relation (63\% to 81\%), and order
 (46\% to 86\% and 59\% to 91\%) substantially, while not degrading performance
 in other downstream tasks.
 
@@ -74,19 +75,19 @@ in other downstream tasks.
 
 Here we discuss two papers that look at improving understanding in
 \acrfullpl{vidlm} by extending the contrastive objectives with hard negatives
-for verb understanding~\cite{momeni2023verbs}, and in before/after
-relations~\cite{bagad2023testoftime}. 
+for verb understanding~\citep{momeni2023verbs}, and in before/after
+relations~\citep{bagad2023testoftime}. 
 
 \subsection{Verbs in Action}
 \label{ssec:verbs}
 \citet{momeni2023verbs} look at \acrshortpl{vidlm} trained with a contrastive
 loss function, and find similar issues with verb understanding to those
-identified by~\cite{yuksekgonul2023when}. They propose to generate hard
+identified by~\citet{yuksekgonul2023when}. They propose to generate hard
 negatives with modified verb phrases using pre-trained \acrfullpl{llm}, as well
 as introducing an additional verb phrase alignment loss which contrastively
 compare a verb phrase from the positive caption to other verb phrases in the
 batch to provide an additional focus on verbs to the model
-(see~\cref{fig:vfc}). As in~\cite{yuksekgonul2023when}, models trained with
+(see~\cref{fig:vfc}). As in~\citet{yuksekgonul2023when}, models trained with
 targeted alternatives improve performance for datasets that require
 understanding of the targeted domain in both zero-shot and finetuning setups. 
 
@@ -95,7 +96,7 @@ understanding of the targeted domain in both zero-shot and finetuning setups.
 	\includegraphics[width=\textwidth]{vfc.png}
 	\caption{Verb-Focused Contrastive learning. Generated negative captions are
 	added as hard negatives to the contrastive loss objective.
-	From~\cite{momeni2023verbs}.}
+	From~\citet{momeni2023verbs}.}
 	\label{fig:vfc}
 \end{figure}
 
@@ -105,7 +106,7 @@ understanding of the targeted domain in both zero-shot and finetuning setups.
 
 \subsection{Test of Time}
 \label{ssec:testoftime}
-The most similar paper to our work is~\cite{bagad2023testoftime}. The authors
+The most similar paper to our work is~\citet{bagad2023testoftime}. The authors
 look at before/after relations in videos by using a synthetic dataset to
 probe existing models. They construct videos containing pairs of events such
 as ``a red circle appears before a yellow circle'', and create distractor
@@ -148,7 +149,7 @@ Charades baseline model (25.2 vs 26.0). They find that the TACT model generally
 improves performance on action recognition benchmark subsets which have been
 identified as requiring temporal information. 
 
-In comparison to~\cite{bagad2023testoftime}, we explore different ways of
+In comparison to~\citet{bagad2023testoftime}, we explore different ways of
 probing temporal understanding, use a wider range of temporal relations with
 full videos, and aim to gain a stronger relationship between frame and action
 with the contrastive span objective. We provide a full comparison of our
